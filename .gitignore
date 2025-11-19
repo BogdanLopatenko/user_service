@@ -1,0 +1,49 @@
+# Maven
+/target/
+*.log
+*.class
+*.jar
+*.war
+
+# IDE
+## Spring Tools Suite (STS)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+## IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+*.env
+
+## NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+## VS Code
+.vscode/
+
+# Docker
+Dockerfile~
+.dockerignore
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Exceptions (если нужно отслеживать конкретные target/build)
+!**/src/main/**/target/
+!**/src/test/**/target/
