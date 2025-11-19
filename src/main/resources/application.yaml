@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+    username: ${DATASOURCE_LOGIN}
+    password: ${DATASOURCE_PASSWORD}}
+    url: ${DATASOURCE_URL}:jdbc:postgresql://localhost:5432/user_db
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    enabled: true
