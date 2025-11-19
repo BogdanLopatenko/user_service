@@ -21,7 +21,7 @@ databaseChangeLog:
                   name: password
                   type: varchar(64)
                   constraints:
-                    nullable: true
+                    nullable: false
               - column:
                   name: firstname
                   type: varchar(50)
