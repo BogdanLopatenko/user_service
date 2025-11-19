@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db.changelog-create-enums.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-create-users-table.yaml
+      relativeToChangelogFile: true

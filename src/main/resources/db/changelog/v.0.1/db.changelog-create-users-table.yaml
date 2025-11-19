@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: 19112025-create-users-table
+      author: bogdan_lopatenko
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: username
+                  type: varchar(75)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: firstname
+                  type: varchar(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: lastname
+                  type: varchar(50)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: email
+                  type: varchar(100)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: role
+                  type: user_role
+                  defaultValue: "USER"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+
+        - sql:
+            splitStatements: false
+            sql: |
+              ALTER TABLE users
+              ADD CONSTRAINT chk_email_format CHECK (
+                email ~* '^[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z]{2,}$'
+              );

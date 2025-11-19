@@ -6,9 +6,10 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    username: ${DATASOURCE_LOGIN}
-    password: ${DATASOURCE_PASSWORD}}
-    url: ${DATASOURCE_URL}:jdbc:postgresql://localhost:5432/user_db
+    url: jdbc:postgresql://localhost:5432/user_db
+    username: ${DB_LOGIN}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   liquibase:
     enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
