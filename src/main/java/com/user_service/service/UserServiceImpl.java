@@ -30,9 +30,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto getById(Long id) {
 
-        User userBuId = getUserById(id);
+        User userById = getUserById(id);
 
-        return mapper.toResponseDto(userBuId);
+        return mapper.toResponseDto(userById);
     }
 
     @Override

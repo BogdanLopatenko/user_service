@@ -39,7 +39,6 @@ public class UserController implements UserApi {
         return userService.search(filterDto);
     }
 
-
     @PostMapping
     public UserResponseDto createWithRole(@RequestBody UserRequestDto dto, @RequestParam UserRole userRole) {
 
