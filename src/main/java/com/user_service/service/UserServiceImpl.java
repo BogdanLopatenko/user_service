@@ -60,7 +60,9 @@ public class UserServiceImpl implements UserService {
         user.setRole(role);
         user.setIsActive(true);
 
-        return mapper.toResponseDto(user);
+        User savedUser = repository.save(user);
+
+        return mapper.toResponseDto(savedUser);
     }
 
     @Override

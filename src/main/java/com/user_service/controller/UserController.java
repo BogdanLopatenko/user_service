@@ -1,5 +1,6 @@
 package com.user_service.controller;
 
+import com.user_service.api.UserApi;
 import com.user_service.dto.UserRequestDto;
 import com.user_service.dto.UserResponseDto;
 import com.user_service.dto.UserUpdateDto;
@@ -22,9 +23,9 @@ import java.util.List;
 @RequestMapping("/users")
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserApi {
 
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping("{id}")
     public UserResponseDto getById(@PathVariable Long id){
@@ -40,7 +41,7 @@ public class UserController {
 
 
     @PostMapping
-    public UserResponseDto create(@RequestBody UserRequestDto dto, @RequestParam(required = false) UserRole userRole) {
+    public UserResponseDto createWithRole(@RequestBody UserRequestDto dto, @RequestParam UserRole userRole) {
 
         return userService.createWithRole(dto, userRole);
     }
