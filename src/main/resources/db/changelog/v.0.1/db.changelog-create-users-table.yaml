@@ -21,7 +21,7 @@ databaseChangeLog:
                   name: password
                   type: varchar(64)
                   constraints:
-                    nullable: true
+                    nullable: false
               - column:
                   name: firstname
                   type: varchar(50)
@@ -50,11 +50,3 @@ databaseChangeLog:
                   defaultValueBoolean: true
                   constraints:
                     nullable: false
-
-        - sql:
-            splitStatements: false
-            sql: |
-              ALTER TABLE users
-              ADD CONSTRAINT chk_email_format CHECK (
-                email ~* '^[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z]{2,}$'
-              );
