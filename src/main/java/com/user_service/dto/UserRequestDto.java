@@ -1,17 +1,11 @@
 package com.user_service.dto;
 
-import com.user_service.enums.UserRole;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcType;
-import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 @Data
 @NoArgsConstructor
@@ -36,12 +30,4 @@ public class UserRequestDto {
     @NotBlank(message = "Email can't be null or blank.")
     @Size(message = "Email must be in range > 5 & < 100", min = 5, max = 100)
     private String email;
-
-    @NotNull(message = "Role can't be null.")
-    @Enumerated(EnumType.STRING)
-    @JdbcType(PostgreSQLEnumJdbcType.class)
-    private UserRole role;
-
-    @NotNull(message = "Is active can't be null.")
-    private Boolean isActive;
 }
