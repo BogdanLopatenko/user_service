@@ -48,13 +48,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto createWithRole(UserRequestDto dto, UserRole role) {
 
-        repository.findByUsername(dto.getUsername()).ifPresent(e -> {
-            throw new UsernameIsAlreadyExistException(ExceptionConstant.USERNAME_IS_ALREADY_EXIST + dto.getUsername());
-        });
+        checkUniqueUsername(dto.getUsername());
 
-        repository.findByEmail(dto.getEmail()).ifPresent(e -> {
-            throw new EmailIsAlreadyExistException(ExceptionConstant.EMAIL_IS_ALREADY_EXIST + dto.getEmail());
-        });
+        checkUniqueEmail(dto.getEmail());
 
         User user = mapper.toEntityFromRequestDto(dto);
         user.setRole(role);
@@ -84,5 +80,19 @@ public class UserServiceImpl implements UserService {
     private User getUserById(Long id){
 
         return repository.findById(id).orElseThrow(() -> new UserNotFoundException(ExceptionConstant.USER_NOT_FOUND_BY_ID + id));
+    }
+
+    private void checkUniqueEmail(String email){
+
+        repository.findByEmail(email).ifPresent(e -> {
+            throw new EmailIsAlreadyExistException(ExceptionConstant.EMAIL_IS_ALREADY_EXIST + email);
+        });
+    }
+
+    private void checkUniqueUsername(String username){
+
+        repository.findByUsername(username).ifPresent(e -> {
+            throw new UsernameIsAlreadyExistException(ExceptionConstant.USERNAME_IS_ALREADY_EXIST + username);
+        });
     }
 }

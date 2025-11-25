@@ -7,8 +7,8 @@ spring:
       ddl-auto: none
   datasource:
     url: jdbc:postgresql://localhost:5432/user_db
-    username: ${DB_LOGIN}
-    password: ${DB_PASSWORD}
+    username: ${DB_LOGIN:postgres}
+    password: ${DB_PASSWORD:admin}
     driver-class-name: org.postgresql.Driver
   liquibase:
     enabled: true
