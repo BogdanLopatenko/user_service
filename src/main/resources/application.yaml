@@ -14,7 +14,7 @@ spring:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
   application:
-    name: user-service
+    name: ${APPLICATION_NAME:user-service}
 
 logging:
   pattern:
@@ -23,6 +23,10 @@ logging:
     root: info
 
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
+    registry-fetch-interval-seconds: 5
+    initial-instance-info-replication-interval-seconds: 5
     service-url:
-      defaultZone: ${EUREKA_HOST_URL:http://localhost:8761/eureka}
+      defaultZone: ${EUREKA_HOST_URL:http://localhost:8761/eureka/}

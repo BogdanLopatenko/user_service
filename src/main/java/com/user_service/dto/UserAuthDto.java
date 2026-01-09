@@ -1,4 +1,4 @@
-package com.user_service.dto.filter;
+package com.user_service.dto;
 
 import com.user_service.enums.UserRole;
 import lombok.AllArgsConstructor;
@@ -8,17 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserFilterDto {
+public class UserAuthDto {
 
     private String username;
 
-    private String firstname;
-
-    private String lastname;
+    private String password;
 
     private String email;
 
     private UserRole role;
-
-    private Boolean isActive;
 }

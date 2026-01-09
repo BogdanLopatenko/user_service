@@ -1,5 +1,6 @@
 package com.user_service.mapper;
 
+import com.user_service.dto.UserAuthDto;
 import com.user_service.dto.UserRequestDto;
 import com.user_service.dto.UserResponseDto;
 import com.user_service.dto.UserUpdateDto;
@@ -21,6 +22,8 @@ import java.util.List;
 public interface UserMapper {
 
     UserResponseDto toResponseDto(User user);
+
+    UserAuthDto toAuthDto(User user);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)

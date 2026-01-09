@@ -1,5 +1,6 @@
 package com.user_service.service;
 
+import com.user_service.dto.UserAuthDto;
 import com.user_service.dto.UserRequestDto;
 import com.user_service.dto.UserResponseDto;
 import com.user_service.dto.UserUpdateDto;
@@ -12,7 +13,9 @@ public interface UserService {
 
     UserResponseDto getById(Long id);
 
-    List<UserResponseDto>  search(UserFilterDto filterDto);
+    UserAuthDto getByUsername(String username);
+
+    List<UserResponseDto> search(UserFilterDto filterDto);
 
     UserResponseDto createWithRole(UserRequestDto dto, UserRole role);
 

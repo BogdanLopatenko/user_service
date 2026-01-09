@@ -13,7 +13,8 @@ import org.springframework.stereotype.Component;
 public class ServiceLogging {
 
     @Pointcut("execution(public * com.user_service.service..*.*(..))")
-    public void serviceLayer(){}
+    public void serviceLayer() {
+    }
 
     @Around("serviceLayer()")
     public Object LogServiceLayer(ProceedingJoinPoint joinPoint) throws Throwable {
