@@ -11,7 +11,7 @@ import com.user_service.exception.UserNotFoundException;
 import com.user_service.exception.UsernameIsAlreadyExistException;
 import com.user_service.mapper.UserMapper;
 import com.user_service.repository.UserRepository;
-import com.user_service.service.UserServiceImpl;
+import com.user_service.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

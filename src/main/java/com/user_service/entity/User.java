@@ -36,7 +36,7 @@ public class User {
     private String username;
 
     @NotBlank(message = "Password can't be null or blank.")
-    @Size(message = "Password must be in range > 4 & < 50", min = 4, max = 50)
+    @Size(message = "Password must be in range > 4 & < 64", min = 4, max = 64)
     @Column(name = "password", nullable = false)
     private String password;
 

@@ -11,19 +11,19 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleUserNotFoundException(UserNotFoundException exception){
+    public ResponseEntity<Map<String, String>> handleUserNotFoundException(UserNotFoundException exception) {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", exception.getMessage()));
     }
 
     @ExceptionHandler(EmailIsAlreadyExistException.class)
-    public ResponseEntity<Map<String, String>> handleEmailIsAlreadyExistException(EmailIsAlreadyExistException exception){
+    public ResponseEntity<Map<String, String>> handleEmailIsAlreadyExistException(EmailIsAlreadyExistException exception) {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", exception.getMessage()));
     }
 
     @ExceptionHandler(UsernameIsAlreadyExistException.class)
-    public ResponseEntity<Map<String, String>> handleUsernameIsAlreadyExistException(UsernameIsAlreadyExistException exception){
+    public ResponseEntity<Map<String, String>> handleUsernameIsAlreadyExistException(UsernameIsAlreadyExistException exception) {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", exception.getMessage()));
     }

@@ -1,6 +1,7 @@
-package com.user_service.service;
+package com.user_service.service.impl;
 
 import com.user_service.constant.ExceptionConstant;
+import com.user_service.dto.UserAuthDto;
 import com.user_service.dto.UserRequestDto;
 import com.user_service.dto.UserResponseDto;
 import com.user_service.dto.UserUpdateDto;
@@ -13,6 +14,7 @@ import com.user_service.exception.UserNotFoundException;
 import com.user_service.exception.UsernameIsAlreadyExistException;
 import com.user_service.mapper.UserMapper;
 import com.user_service.repository.UserRepository;
+import com.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
@@ -40,6 +42,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserAuthDto getByUsername(String username) {
+
+        User userByUsername = repository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(ExceptionConstant.USER_NOT_FOUND_BY_USERNAME + username));
+
+        log.info("Found user by username {}", username);
+
+        return mapper.toAuthDto(userByUsername);
+    }
+
+    @Override
     public List<UserResponseDto> search(UserFilterDto filterDto) {
 
         Specification<User> userSpecification = UserSpecification.withFilters(filterDto);
@@ -56,8 +68,6 @@ public class UserServiceImpl implements UserService {
 
         checkUniqueUsername(dto.getUsername());
         checkUniqueEmail(dto.getEmail());
-
-        log.info("Username: {} and Email: {} is unique", dto.getUsername(), dto.getEmail());
 
         User user = mapper.toEntityFromRequestDto(dto);
         user.setRole(role);
@@ -94,14 +104,14 @@ public class UserServiceImpl implements UserService {
         repository.deleteById(id);
     }
 
-    private User getUserById(Long id){
+    private User getUserById(Long id) {
 
         log.info("Get UserById method, id: {}", id);
 
         return repository.findById(id).orElseThrow(() -> new UserNotFoundException(ExceptionConstant.USER_NOT_FOUND_BY_ID + id));
     }
 
-    private void checkUniqueEmail(String email){
+    private void checkUniqueEmail(String email) {
 
         log.info("Checking unique email: {}", email);
 
@@ -112,7 +122,7 @@ public class UserServiceImpl implements UserService {
         log.info("Email {} is unique", email);
     }
 
-    private void checkUniqueUsername(String username){
+    private void checkUniqueUsername(String username) {
 
         log.info("Checking unique email: {}", username);
 

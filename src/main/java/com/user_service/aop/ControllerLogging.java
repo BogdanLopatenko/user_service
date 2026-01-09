@@ -15,9 +15,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class ControllerLogging {
 
     @Around("within(@org.springframework.web.bind.annotation.RestController *)")
-    public Object logController(ProceedingJoinPoint joinPoint) throws Throwable{
+    public Object logController(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
         log.info("CONTROLLER: IN - URI: {}, Method: {}, User: {}",
                 request.getRequestURI(),

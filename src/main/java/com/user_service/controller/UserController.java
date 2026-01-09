@@ -1,6 +1,7 @@
 package com.user_service.controller;
 
 import com.user_service.api.UserApi;
+import com.user_service.dto.UserAuthDto;
 import com.user_service.dto.UserRequestDto;
 import com.user_service.dto.UserResponseDto;
 import com.user_service.dto.UserUpdateDto;
@@ -28,15 +29,27 @@ public class UserController implements UserApi {
     private final UserService userService;
 
     @GetMapping("{id}")
-    public UserResponseDto getById(@PathVariable Long id){
+    public UserResponseDto getById(@PathVariable Long id) {
 
         return userService.getById(id);
     }
 
+    @GetMapping("/by-username")
+    public UserAuthDto getByUsername(@RequestParam("username") String username) {
+
+        return userService.getByUsername(username);
+    }
+
     @PostMapping("/search")
-    public List<UserResponseDto> search(UserFilterDto filterDto){
+    public List<UserResponseDto> search(UserFilterDto filterDto) {
 
         return userService.search(filterDto);
+    }
+
+    @PostMapping("/new")
+    public UserResponseDto create(@RequestBody UserRequestDto dto) {
+
+        return userService.createWithRole(dto, UserRole.USER);
     }
 
     @PostMapping
@@ -46,13 +59,13 @@ public class UserController implements UserApi {
     }
 
     @PutMapping
-    public void update(UserUpdateDto updateDto){
+    public void update(UserUpdateDto updateDto) {
 
         userService.update(updateDto);
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
 
         userService.delete(id);
     }
