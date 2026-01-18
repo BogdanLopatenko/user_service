@@ -6,6 +6,7 @@ import com.user_service.dto.UserUpdateDto;
 import com.user_service.dto.filter.UserFilterDto;
 import com.user_service.entity.User;
 import com.user_service.enums.UserRole;
+import com.user_service.enums.UserStatus;
 import com.user_service.exception.EmailIsAlreadyExistException;
 import com.user_service.exception.UserNotFoundException;
 import com.user_service.exception.UsernameIsAlreadyExistException;
@@ -37,8 +38,8 @@ public class UserServiceImplIntegrationTest {
     @BeforeEach
     void setUp() {
 
-        User user1 = new User(null, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, true);
-        User user2 = new User(null, "someusername2", "somepassword", "somefirstname", "somelastname", "someemail3@gmail.com", UserRole.USER, true);
+        User user1 = new User(null, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, UserStatus.ACTIVE);
+        User user2 = new User(null, "someusername2", "somepassword", "somefirstname", "somelastname", "someemail3@gmail.com", UserRole.USER, UserStatus.ACTIVE);
 
         savedUser = userRepository.save(user1);
         userRepository.save(user2);
@@ -69,11 +70,11 @@ public class UserServiceImplIntegrationTest {
     @DisplayName("Should return list with user")
     void search_Success() {
 
-        UserFilterDto userFilterDto = new UserFilterDto(null, null, null, null, null, true);
+        UserFilterDto userFilterDto = new UserFilterDto(null, null, null, null, null, UserStatus.ACTIVE);
 
         List<UserResponseDto> result = userService.search(userFilterDto);
 
-        assertEquals(result.get(0).getIsActive(), savedUser.getIsActive(), "List should contains user");
+        assertEquals(result.get(0).getStatus(), savedUser.getStatus(), "List should contains user");
     }
 
     @Test
@@ -113,7 +114,7 @@ public class UserServiceImplIntegrationTest {
     @DisplayName("Should update user")
     void update_Successfully() {
 
-        UserUpdateDto userUpdateDto = new UserUpdateDto(1L, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.ADMIN, true);
+        UserUpdateDto userUpdateDto = new UserUpdateDto(1L, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.ADMIN, UserStatus.ACTIVE);
 
         userService.update(userUpdateDto);
 

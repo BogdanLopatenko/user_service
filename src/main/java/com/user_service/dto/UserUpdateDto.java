@@ -1,6 +1,7 @@
 package com.user_service.dto;
 
 import com.user_service.enums.UserRole;
+import com.user_service.enums.UserStatus;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -36,5 +37,5 @@ public class UserUpdateDto {
 
     private UserRole role;
 
-    private Boolean isActive;
+    private UserStatus status;
 }

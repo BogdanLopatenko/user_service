@@ -9,6 +9,7 @@ import com.user_service.dto.filter.UserFilterDto;
 import com.user_service.dto.filter.UserSpecification;
 import com.user_service.entity.User;
 import com.user_service.enums.UserRole;
+import com.user_service.enums.UserStatus;
 import com.user_service.exception.EmailIsAlreadyExistException;
 import com.user_service.exception.UserNotFoundException;
 import com.user_service.exception.UsernameIsAlreadyExistException;
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
         User user = mapper.toEntityFromRequestDto(dto);
         user.setRole(role);
-        user.setIsActive(true);
+        user.setStatus(UserStatus.NEED_EMAIL_APPROVING);
 
         log.info("Start saving user");
 

@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - include:
+      file: db.changelog-create-user-status-enum.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-add-status-column.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-migrate-is-active-column.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-change-status-constraint.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-drop-is-active-column.yaml
+      relativeToChangelogFile: true
+
