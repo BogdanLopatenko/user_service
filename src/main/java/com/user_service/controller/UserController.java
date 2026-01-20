@@ -1,19 +1,18 @@
 package com.user_service.controller;
 
 import com.user_service.api.UserApi;
-import com.user_service.dto.UserAuthDto;
-import com.user_service.dto.UserRequestDto;
-import com.user_service.dto.UserResponseDto;
-import com.user_service.dto.UserUpdateDto;
+import com.user_service.dto.confirmation.UserEmailConformationResponseDto;
+import com.user_service.dto.user.UserAuthDto;
+import com.user_service.dto.user.UserRequestDto;
+import com.user_service.dto.user.UserResponseDto;
 import com.user_service.dto.filter.UserFilterDto;
 import com.user_service.enums.UserRole;
+import com.user_service.service.UserEmailConfirmationService;
 import com.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +26,8 @@ import java.util.List;
 public class UserController implements UserApi {
 
     private final UserService userService;
+
+    private final UserEmailConfirmationService userEmailConfirmationService;
 
     @GetMapping("{id}")
     public UserResponseDto getById(@PathVariable Long id) {
@@ -58,15 +59,11 @@ public class UserController implements UserApi {
         return userService.createWithRole(dto, userRole);
     }
 
-    @PutMapping
-    public void update(UserUpdateDto updateDto) {
+    @GetMapping("/verification-token/{userId}")
+    public String generateEmailVerificationToken(@PathVariable Long userId){
 
-        userService.update(updateDto);
-    }
+        UserEmailConformationResponseDto userEmailConformationResponseDto = userEmailConfirmationService.create(userId);
 
-    @DeleteMapping("{id}")
-    public void delete(@PathVariable Long id) {
-
-        userService.delete(id);
+        return String.valueOf(userEmailConformationResponseDto.getToken());
     }
 }

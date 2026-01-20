@@ -1,10 +1,10 @@
 package com.user_service.service.impl;
 
 import com.user_service.constant.ExceptionConstant;
-import com.user_service.dto.UserAuthDto;
-import com.user_service.dto.UserRequestDto;
-import com.user_service.dto.UserResponseDto;
-import com.user_service.dto.UserUpdateDto;
+import com.user_service.dto.user.UserAuthDto;
+import com.user_service.dto.user.UserRequestDto;
+import com.user_service.dto.user.UserResponseDto;
+import com.user_service.dto.user.UserUpdateDto;
 import com.user_service.dto.filter.UserFilterDto;
 import com.user_service.dto.filter.UserSpecification;
 import com.user_service.entity.User;
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
         User user = mapper.toEntityFromRequestDto(dto);
         user.setRole(role);
-        user.setStatus(UserStatus.NEED_EMAIL_APPROVING);
+        user.setStatus(UserStatus.NEED_EMAIL_CONFIRMATION);
 
         log.info("Start saving user");
 
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
 
         log.info("Found user by id {}", userById.getId());
 
-        mapper.updateUserFromDb(dto, userById);
+        mapper.updateFromDb(dto, userById);
 
         log.info("Start saving user");
 

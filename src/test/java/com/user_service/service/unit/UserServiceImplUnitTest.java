@@ -1,11 +1,12 @@
 package com.user_service.service.unit;
 
-import com.user_service.dto.UserRequestDto;
-import com.user_service.dto.UserResponseDto;
-import com.user_service.dto.UserUpdateDto;
+import com.user_service.dto.user.UserRequestDto;
+import com.user_service.dto.user.UserResponseDto;
+import com.user_service.dto.user.UserUpdateDto;
 import com.user_service.dto.filter.UserFilterDto;
 import com.user_service.entity.User;
 import com.user_service.enums.UserRole;
+import com.user_service.enums.UserStatus;
 import com.user_service.exception.EmailIsAlreadyExistException;
 import com.user_service.exception.UserNotFoundException;
 import com.user_service.exception.UsernameIsAlreadyExistException;
@@ -39,16 +40,16 @@ public class UserServiceImplUnitTest {
     private UserServiceImpl userService;
 
     private final Long userId = 1L;
-    private final User fullUser1 = new User(userId, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, true);
-    private final User fullUser2 = new User(userId + 1, "bogdan", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, true);
+    private final User fullUser1 = new User(userId, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, UserStatus.ACTIVE);
+    private final User fullUser2 = new User(userId + 1, "bogdan", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, UserStatus.ACTIVE);
 
     private final User unfilledUser1 = new User(null, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", null, null);
-    private final User user1WithoutId = new User(null, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, true);
-    private final UserResponseDto responseDtoUser1 = new UserResponseDto(userId, "someusername", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, true);
-    private final UserResponseDto responseDtoUser2 = new UserResponseDto(userId + 1, "bogdan", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, true);
+    private final User user1WithoutId = new User(null, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, UserStatus.ACTIVE);
+    private final UserResponseDto responseDtoUser1 = new UserResponseDto(userId, "someusername", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, UserStatus.ACTIVE);
+    private final UserResponseDto responseDtoUser2 = new UserResponseDto(userId + 1, "bogdan", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, UserStatus.ACTIVE);
 
-    private final UserUpdateDto userUpdateDto1 = new UserUpdateDto(userId, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.ADMIN, true);
-    private final User changedUser1 = new User(userId, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.ADMIN, true);
+    private final UserUpdateDto userUpdateDto1 = new UserUpdateDto(userId, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.ADMIN, UserStatus.ACTIVE);
+    private final User changedUser1 = new User(userId, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.ADMIN, UserStatus.ACTIVE);
     private final UserRequestDto requestDtoUser1 = new UserRequestDto("someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com");
     private final UserFilterDto filterDto = new UserFilterDto("bogdan", "", "", "", null, null);
     private final List<User> userList = List.of(fullUser1, fullUser2);
@@ -167,7 +168,7 @@ public class UserServiceImplUnitTest {
         userService.update(userUpdateDto1);
 
         verify(userRepository, times(1)).findById(userUpdateDto1.getId());
-        verify(userMapper, times(1)).updateUserFromDb(userUpdateDto1, fullUser1);
+        verify(userMapper, times(1)).updateFromDb(userUpdateDto1, fullUser1);
         assertEquals(UserRole.ADMIN, changedUser1.getRole(), "User should be updated by mapper");
         verify(userRepository, times(1)).save(fullUser1);
     }

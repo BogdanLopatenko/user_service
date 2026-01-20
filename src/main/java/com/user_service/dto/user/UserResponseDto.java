@@ -1,4 +1,4 @@
-package com.user_service.dto;
+package com.user_service.dto.user;
 
 import com.user_service.enums.UserRole;
 import com.user_service.enums.UserStatus;

@@ -1,14 +1,14 @@
 package com.user_service.api;
 
-import com.user_service.dto.UserRequestDto;
-import com.user_service.dto.UserResponseDto;
-import com.user_service.dto.UserUpdateDto;
 import com.user_service.dto.filter.UserFilterDto;
+import com.user_service.dto.user.UserRequestDto;
+import com.user_service.dto.user.UserResponseDto;
 import com.user_service.enums.UserRole;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -40,21 +40,12 @@ public interface UserApi {
     })
     UserResponseDto createWithRole(UserRequestDto dto, UserRole userRole);
 
-    @Operation(summary = "Update user", description = "Update an existing user's details. Access is controlled by permission validator.")
+    @Operation(summary = "Generate email verification token", description = "Generates a new user email verification token..")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "User updated successfully."),
+            @ApiResponse(responseCode = "201", description = "Code created successfully."),
             @ApiResponse(responseCode = "400", description = "Invalid request data."),
             @ApiResponse(responseCode = "403", description = "Access denied."),
-            @ApiResponse(responseCode = "404", description = "User not found."),
             @ApiResponse(responseCode = "500", description = "Internal server error.")
     })
-    void update(UserUpdateDto dto);
-
-    @Operation(summary = "Delete user by ID", description = "Delete a user by their ID.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "User deleted successfully."),
-            @ApiResponse(responseCode = "404", description = "User not found."),
-            @ApiResponse(responseCode = "500", description = "Internal server error.")
-    })
-    void delete(Long id);
+    String generateEmailVerificationToken(@PathVariable Long userId);
 }

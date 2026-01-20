@@ -4,5 +4,5 @@ public enum UserStatus {
 
     ACTIVE,
     DISABLED,
-    NEED_EMAIL_APPROVING
+    NEED_EMAIL_CONFIRMATION
 }

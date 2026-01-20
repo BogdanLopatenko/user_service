@@ -1,9 +1,9 @@
 package com.user_service.service;
 
-import com.user_service.dto.UserAuthDto;
-import com.user_service.dto.UserRequestDto;
-import com.user_service.dto.UserResponseDto;
-import com.user_service.dto.UserUpdateDto;
+import com.user_service.dto.user.UserAuthDto;
+import com.user_service.dto.user.UserRequestDto;
+import com.user_service.dto.user.UserResponseDto;
+import com.user_service.dto.user.UserUpdateDto;
 import com.user_service.dto.filter.UserFilterDto;
 import com.user_service.enums.UserRole;
 
