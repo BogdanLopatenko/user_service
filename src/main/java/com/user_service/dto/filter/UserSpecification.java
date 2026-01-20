@@ -39,9 +39,9 @@ public class UserSpecification {
                         cb.equal(root.get("role"), filter.getRole()));
             }
 
-            if (filter.getIsActive() != null) {
+            if (filter.getStatus() != null) {
                 predicate = cb.and(predicate,
-                        cb.equal(root.get("isActive"), filter.getIsActive()));
+                        cb.equal(root.get("status"), filter.getStatus()));
             }
 
             return predicate;

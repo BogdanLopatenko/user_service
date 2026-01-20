@@ -1,9 +1,9 @@
 package com.user_service.mapper;
 
-import com.user_service.dto.UserAuthDto;
-import com.user_service.dto.UserRequestDto;
-import com.user_service.dto.UserResponseDto;
-import com.user_service.dto.UserUpdateDto;
+import com.user_service.dto.user.UserAuthDto;
+import com.user_service.dto.user.UserRequestDto;
+import com.user_service.dto.user.UserResponseDto;
+import com.user_service.dto.user.UserUpdateDto;
 import com.user_service.entity.User;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -25,13 +25,16 @@ public interface UserMapper {
 
     UserAuthDto toAuthDto(User user);
 
+    @Mapping(target = "password", ignore = true)
+    User toEntityFromResponseDto(UserResponseDto userResponseDto);
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)
-    @Mapping(target = "isActive", ignore = true)
+    @Mapping(target = "status", ignore = true)
     User toEntityFromRequestDto(UserRequestDto dto);
 
     List<UserResponseDto> toResponseDtoList(List<User> users);
 
-    void updateUserFromDb(UserUpdateDto dto, @MappingTarget User user);
+    void updateFromDb(UserUpdateDto dto, @MappingTarget User user);
 
 }

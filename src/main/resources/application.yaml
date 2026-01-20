@@ -30,3 +30,7 @@ eureka:
     initial-instance-info-replication-interval-seconds: 5
     service-url:
       defaultZone: ${EUREKA_HOST_URL:http://localhost:8761/eureka/}
+
+email-confirmation:
+  token:
+    expiration-durability: 6

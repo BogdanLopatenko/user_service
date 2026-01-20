@@ -1,5 +1,8 @@
-package com.user_service.exception;
+package com.user_service.exception.handler;
 
+import com.user_service.exception.EmailIsAlreadyExistException;
+import com.user_service.exception.UserNotFoundException;
+import com.user_service.exception.UsernameIsAlreadyExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

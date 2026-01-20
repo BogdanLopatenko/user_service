@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 17012026-add-status-column
+      author: bogdan_lopatenko
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: status
+                  type: user_status
+                  constraints:
+                    nullable: true

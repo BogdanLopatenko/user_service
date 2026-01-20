@@ -1,6 +1,7 @@
 package com.user_service.entity;
 
 import com.user_service.enums.UserRole;
+import com.user_service.enums.UserStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -60,7 +61,9 @@ public class User {
     @Column(name = "role", nullable = false)
     private UserRole role;
 
-    @NotNull(message = "Is active can't be null.")
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
+    @NotNull(message = "Status can't be null.")
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    @Column(name = "status", nullable = false)
+    private UserStatus status;
 }

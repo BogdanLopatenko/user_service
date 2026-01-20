@@ -1,6 +1,7 @@
 package com.user_service.dto.filter;
 
 import com.user_service.enums.UserRole;
+import com.user_service.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,5 @@ public class UserFilterDto {
 
     private UserRole role;
 
-    private Boolean isActive;
+    private UserStatus status;
 }

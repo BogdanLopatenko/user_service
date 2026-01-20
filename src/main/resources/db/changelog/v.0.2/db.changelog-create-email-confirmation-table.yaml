@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 18012026-create-email-confirmation-table
+      author: bogdan_lopatenko
+      changes:
+        - createTable:
+            tableName: user_email_confirmation
+            columns:
+              - column:
+                  name: token
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expires_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_used
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: user_email_confirmation
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_users_email_confirmation
+

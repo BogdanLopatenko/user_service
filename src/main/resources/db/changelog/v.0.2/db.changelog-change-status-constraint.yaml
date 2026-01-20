@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 17012026-status-not-null
+      author: bogdan_lopatenko
+      changes:
+        - addNotNullConstraint:
+            tableName: users
+            columnName: status

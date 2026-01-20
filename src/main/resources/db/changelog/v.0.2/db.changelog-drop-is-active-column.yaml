@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 17012026-drop-is-active-column
+      author: bogdan_lopatenko
+      changes:
+        - dropColumn:
+            tableName: users
+            columnName: is_active

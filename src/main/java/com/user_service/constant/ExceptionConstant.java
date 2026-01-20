@@ -9,6 +9,8 @@ public final class ExceptionConstant {
 
     public static final String EMAIL_IS_ALREADY_EXIST = "Email is already exist: ";
 
+    public static final String EMAIL_CONFIRMATION_NOT_FOUND_BY_TOKEN = "Email confirmation not found by token: ";
+
     private ExceptionConstant() {
     }
 }
