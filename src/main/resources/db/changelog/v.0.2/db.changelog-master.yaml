@@ -14,4 +14,7 @@ databaseChangeLog:
   - include:
       file: db.changelog-drop-is-active-column.yaml
       relativeToChangelogFile: true
+  - include:
+      file: db.changelog-create-email-confirmation-table.yaml
+      relativeToChangelogFile: true
 

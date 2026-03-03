@@ -4,7 +4,7 @@ databaseChangeLog:
       author: bogdan_lopatenko
       changes:
         - createTable:
-            tableName: user_email_confirmation
+            tableName: email_confirmation
             columns:
               - column:
                   name: token
@@ -29,7 +29,7 @@ databaseChangeLog:
                     nullable: false
 
         - addForeignKeyConstraint:
-            baseTableName: user_email_confirmation
+            baseTableName: email_confirmation
             baseColumnNames: user_id
             referencedTableName: users
             referencedColumnNames: id
