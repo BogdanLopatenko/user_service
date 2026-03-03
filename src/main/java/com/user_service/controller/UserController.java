@@ -1,13 +1,12 @@
 package com.user_service.controller;
 
 import com.user_service.api.UserApi;
-import com.user_service.dto.confirmation.UserEmailConformationResponseDto;
+import com.user_service.dto.filter.UserFilterDto;
 import com.user_service.dto.user.UserAuthDto;
 import com.user_service.dto.user.UserRequestDto;
 import com.user_service.dto.user.UserResponseDto;
-import com.user_service.dto.filter.UserFilterDto;
 import com.user_service.enums.UserRole;
-import com.user_service.service.UserEmailConfirmationService;
+import com.user_service.service.EmailConfirmationService;
 import com.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,18 +26,18 @@ public class UserController implements UserApi {
 
     private final UserService userService;
 
-    private final UserEmailConfirmationService userEmailConfirmationService;
+    private final EmailConfirmationService emailConfirmationService;
 
-    @GetMapping("{id}")
-    public UserResponseDto getById(@PathVariable Long id) {
-
-        return userService.getById(id);
-    }
-
-    @GetMapping("/by-username")
-    public UserAuthDto getByUsername(@RequestParam("username") String username) {
+    @GetMapping("/by-username/{username}")
+    public UserAuthDto getByUsername(@PathVariable String username) {
 
         return userService.getByUsername(username);
+    }
+
+    @GetMapping("/by-token/{token}")
+    public UserResponseDto getUserByConfirmationToken(@PathVariable String token){
+
+        return emailConfirmationService.getUserByConfirmationToken(token);
     }
 
     @PostMapping("/search")
@@ -59,11 +58,16 @@ public class UserController implements UserApi {
         return userService.createWithRole(dto, userRole);
     }
 
-    @GetMapping("/verification-token/{userId}")
-    public String generateEmailVerificationToken(@PathVariable Long userId){
+    @GetMapping("/generate-token/{userId}")
+    public String generateEmailConfirmationToken(@PathVariable Long userId){
 
-        UserEmailConformationResponseDto userEmailConformationResponseDto = userEmailConfirmationService.create(userId);
-
-        return String.valueOf(userEmailConformationResponseDto.getToken());
+        return String.valueOf(emailConfirmationService.create(userId).getToken());
     }
+
+    @GetMapping("/confirm-email/{token}")
+    public void verifyUsersEmail(@PathVariable String token){
+
+        emailConfirmationService.confirmEmail(token);
+    }
+
 }
