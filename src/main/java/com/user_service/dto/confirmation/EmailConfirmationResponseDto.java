@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEmailConformationResponseDto {
+public class EmailConfirmationResponseDto {
 
     private UUID token;
 

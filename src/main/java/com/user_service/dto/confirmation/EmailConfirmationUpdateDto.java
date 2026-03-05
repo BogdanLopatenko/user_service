@@ -5,15 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEmailConfirmationUpdateDto {
+public class EmailConfirmationUpdateDto {
 
-    @NotNull(message = "Token can't be null")
-    private UUID token;
 
     @NotNull(message = "Is used can't be null.")
     private Boolean isUsed;

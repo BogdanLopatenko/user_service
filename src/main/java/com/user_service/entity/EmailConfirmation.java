@@ -18,11 +18,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user_email_confirmation")
+@Table(name = "email_confirmation")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEmailConfirmation {
+public class EmailConfirmation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

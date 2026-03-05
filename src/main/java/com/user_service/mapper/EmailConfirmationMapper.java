@@ -1,8 +1,8 @@
 package com.user_service.mapper;
 
-import com.user_service.dto.confirmation.UserEmailConformationResponseDto;
+import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
+import com.user_service.entity.EmailConfirmation;
 import com.user_service.entity.User;
-import com.user_service.entity.UserEmailConfirmation;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,10 +17,10 @@ import java.time.LocalDateTime;
                 unmappedTargetPolicy = ReportingPolicy.ERROR,
                 uses = UserMapper.class
         )
-public interface UserEmailConfirmationMapper {
+public interface EmailConfirmationMapper {
 
-        UserEmailConformationResponseDto toResponseDto(UserEmailConfirmation entity);
+    EmailConfirmationResponseDto toResponseDto(EmailConfirmation entity);
 
-        @Mapping(target = "token", ignore = true)
-        UserEmailConfirmation construct(User user, LocalDateTime expiresAt, Boolean isUsed);
+    @Mapping(target = "token", ignore = true)
+    EmailConfirmation construct(User user, LocalDateTime expiresAt, Boolean isUsed);
 }
