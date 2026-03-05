@@ -16,5 +16,5 @@ databaseChangeLog:
             columns:
               - column:
                   name: status
-                  value: NEED_EMAIL_APPROVING
+                  value: NEED_EMAIL_CONFIRMATION
             where: is_active = false

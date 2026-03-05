@@ -13,15 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @Tag(name = "Users", description = "Operations for managing users")
-public interface UserApi {
-
-    @Operation(summary = "Get user by ID", description = "Retrieve a user by their unique ID.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "User found successfully."),
-            @ApiResponse(responseCode = "404", description = "User not found."),
-            @ApiResponse(responseCode = "500", description = "Internal server error.")
-    })
-    UserResponseDto getById(Long id);
+public interface UserServiceApi {
 
     @Operation(summary = "Search users", description = "Search users based on filter criteria.")
     @ApiResponses({
@@ -47,5 +39,5 @@ public interface UserApi {
             @ApiResponse(responseCode = "403", description = "Access denied."),
             @ApiResponse(responseCode = "500", description = "Internal server error.")
     })
-    String generateEmailVerificationToken(@PathVariable Long userId);
+    String generateEmailConfirmationToken(@PathVariable Long userId);
 }

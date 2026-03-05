@@ -6,4 +6,4 @@ databaseChangeLog:
         - sql:
             splitStatements: false
             sql: |
-              CREATE TYPE user_status AS ENUM ('ACTIVE', 'DISABLED', 'NEED_EMAIL_APPROVING');
+              CREATE TYPE user_status AS ENUM ('ACTIVE', 'DISABLED', 'NEED_EMAIL_CONFIRMATION');

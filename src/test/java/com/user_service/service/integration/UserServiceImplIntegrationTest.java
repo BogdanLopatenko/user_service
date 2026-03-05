@@ -114,9 +114,9 @@ public class UserServiceImplIntegrationTest {
     @DisplayName("Should update user")
     void update_Successfully() {
 
-        UserUpdateDto userUpdateDto = new UserUpdateDto(1L, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.ADMIN, UserStatus.ACTIVE);
+        UserUpdateDto userUpdateDto = new UserUpdateDto( "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.ADMIN, UserStatus.ACTIVE);
 
-        userService.update(userUpdateDto);
+        userService.update(1L, userUpdateDto);
 
         UserResponseDto userById = userService.getById(1L);
 
