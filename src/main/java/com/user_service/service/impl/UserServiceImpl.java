@@ -1,12 +1,12 @@
 package com.user_service.service.impl;
 
 import com.user_service.constant.ExceptionConstant;
+import com.user_service.dto.filter.UserFilterDto;
+import com.user_service.dto.filter.UserSpecification;
 import com.user_service.dto.user.UserAuthDto;
 import com.user_service.dto.user.UserRequestDto;
 import com.user_service.dto.user.UserResponseDto;
 import com.user_service.dto.user.UserUpdateDto;
-import com.user_service.dto.filter.UserFilterDto;
-import com.user_service.dto.filter.UserSpecification;
 import com.user_service.entity.User;
 import com.user_service.enums.UserRole;
 import com.user_service.enums.UserStatus;
@@ -84,9 +84,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(UserUpdateDto dto) {
+    public void update(Long id, UserUpdateDto dto) {
 
-        User userById = getUserById(dto.getId());
+        User userById = getUserById(id);
 
         log.info("Found user by id {}", userById.getId());
 

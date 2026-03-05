@@ -1,20 +1,20 @@
 package com.user_service.service.impl;
 
 import com.user_service.constant.ExceptionConstant;
-import com.user_service.dto.confirmation.UserEmailConfirmationResponseDto;
-import com.user_service.dto.confirmation.UserEmailConfirmationUpdateDto;
+import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.dto.user.UserResponseDto;
-import com.user_service.dto.user.UserUpdateDto;
+import com.user_service.entity.EmailConfirmation;
 import com.user_service.entity.User;
-import com.user_service.entity.UserEmailConfirmation;
 import com.user_service.enums.UserStatus;
 import com.user_service.exception.EmailConfirmationTokenExpirationException;
 import com.user_service.exception.EmailIsAlreadyActivatedException;
-import com.user_service.mapper.UserEmailConfirmationMapper;
+import com.user_service.exception.UserEmailConfirmationNotFoundException;
+import com.user_service.exception.UserNotFoundException;
+import com.user_service.mapper.EmailConfirmationMapper;
 import com.user_service.mapper.UserMapper;
+import com.user_service.repository.EmailConfirmationRepository;
+import com.user_service.repository.UserRepository;
 import com.user_service.service.EmailConfirmationService;
-import com.user_service.service.UserEmailConfirmationService;
-import com.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,44 +28,74 @@ import java.util.UUID;
 @Slf4j
 public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
-    private final UserService userService;
-
-    private final UserEmailConfirmationService emailConfirmationService;
-
-    private final UserMapper userMapper;
-
-    private final UserEmailConfirmationMapper emailConfirmationMapper;
-
     @Value("${email-confirmation.token.expiration-durability}")
     private Short expirationDurabilityInHours;
 
+    private final UserRepository userRepository;
+
+    private final UserMapper userMapper;
+
+    private final EmailConfirmationMapper emailConfirmationMapper;
+
+    private final EmailConfirmationRepository emailConfirmationRepository;
+
+
+    @Override
+    public EmailConfirmationResponseDto create(Long userId) {
+
+        log.info("Trying to save email confirmation token");
+
+        log.info("Trying to get user by ID: {}", userId);
+
+        User userById = getUserById(userId);
+
+        log.info("User by ID was successfully got");
+
+        EmailConfirmation constructedEmailConfirmation = emailConfirmationMapper.construct(userById, LocalDateTime.now().plusHours(expirationDurabilityInHours), false);
+
+        log.info("Trying to save email confirmation entity");
+
+        EmailConfirmation savedEntity = emailConfirmationRepository.save(constructedEmailConfirmation);
+
+        log.info("Email confirmation was successfully saved: {}", savedEntity.getToken());
+
+        return emailConfirmationMapper.toResponseDto(savedEntity);
+    }
 
     @Override
     public void confirmEmail(String token) {
 
-        UserEmailConfirmationResponseDto emailConfirmation = emailConfirmationService.getByToken(UUID.fromString(token));
+        EmailConfirmation confirmationByToken = getConfirmationByToken(UUID.fromString(token));
+
+        Long userid = confirmationByToken.getUser().getId();
 
         log.info("Email confirmation token was found: {}", token);
 
-        if (LocalDateTime.now().isAfter(emailConfirmation.getExpiresAt())) {
+        if (LocalDateTime.now().isAfter(confirmationByToken.getExpiresAt())) {
 
-            throw new EmailConfirmationTokenExpirationException(ExceptionConstant.EMAIL_CONFIRMATION_TOKEN_HAD_BEEN_EXPIRED + emailConfirmation.getUser().getEmail());
+            log.warn("Email confirmation toke has been expired at: {} hours, {} minutes", confirmationByToken.getExpiresAt().getHour(), confirmationByToken.getExpiresAt().getMinute());
+
+            throw new EmailConfirmationTokenExpirationException(ExceptionConstant.EMAIL_CONFIRMATION_TOKEN_HAD_BEEN_EXPIRED + confirmationByToken.getUser().getEmail());
         }
 
-        if (emailConfirmation.getIsUsed()) {
+        if (confirmationByToken.getIsUsed()) {
+
+            log.warn("Email confirmation token already has been activated");
 
             throw new EmailIsAlreadyActivatedException(ExceptionConstant.EMAIL_IS_ALREADY_ACTIVATED);
         }
 
-        log.info("Tyring to update token activity");
+        confirmationByToken.setIsUsed(true);
 
-        emailConfirmationService.update(new UserEmailConfirmationUpdateDto(emailConfirmation.getToken(), true));
+        log.info("Tyring to update token");
+
+        emailConfirmationRepository.save(confirmationByToken);
 
         log.info("Token was updated successfully");
 
-        log.info("Trying to update user status by ID: {}", emailConfirmation.getUser().getId());
+        log.info("Trying to update user status by ID: {}", userid);
 
-        updateUserStatus(emailConfirmation.getUser().getId(), UserStatus.ACTIVE);
+        updateUserStatus(userid, UserStatus.ACTIVE);
 
         log.info("User status was updated successfully");
     }
@@ -73,40 +103,53 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
     @Override
     public UserResponseDto getUserByConfirmationToken(String token) {
 
-        UserEmailConfirmationResponseDto byToken = emailConfirmationService.getByToken(UUID.fromString(token));
+        log.info("Trying to get confirmation entity by token: {}", token);
 
-        return byToken.getUser();
+        EmailConfirmation confirmationByToken = getConfirmationByToken(UUID.fromString(token));
+
+        User userFromToken = confirmationByToken.getUser();
+
+        return userMapper.toResponseDto(userFromToken);
     }
 
+    private EmailConfirmation getConfirmationByToken(UUID token) {
 
-    @Override
-    public UserEmailConfirmationResponseDto create(Long userId) {
+        log.info("Entering findByToken(UUID token) method");
 
-        log.info("Trying to get User by id: {}", userId);
+        log.info("Tying to get entity by UUID token: {}", token);
 
-        UserResponseDto userById = userService.getById(userId);
+        EmailConfirmation emailConfirmation = emailConfirmationRepository.findById(token).orElseThrow(() ->
+                new UserEmailConfirmationNotFoundException(ExceptionConstant.EMAIL_CONFIRMATION_NOT_FOUND_BY_TOKEN + token));
 
-        log.info("User was successfully found");
-
-        User user = userMapper.toEntityFromResponseDto(userById);
-
-        log.debug("Constructing email confirmation entity");
-        UserEmailConfirmation constructedEmailConfirmation = emailConfirmationMapper.construct(user, LocalDateTime.now().plusHours(expirationDurabilityInHours), false);
-
-        log.info("Trying to save Email confirmation entity");
-
-        UserEmailConfirmationResponseDto createdEmailConfirmationDto = emailConfirmationService.create(constructedEmailConfirmation);
-
-        log.info("Email confirmation was successfully saved");
-
-        return createdEmailConfirmationDto;
+        log.info("Exit findByToken(UUID token) method");
+        return emailConfirmation;
     }
 
     private void updateUserStatus(Long userId, UserStatus userStatus) {
 
-        userService.update(UserUpdateDto.builder()
-                .id(userId)
-                .status(userStatus)
-                .build());
+        log.info("Entering updateUserStatus(Long userId, UserStatus userStatus) method");
+
+        User userById = getUserById(userId);
+
+        userById.setStatus(userStatus);
+
+        log.info("Trying to save user");
+
+        userRepository.save(userById);
+
+        log.info("Exit updateUserStatus(Long userId, UserStatus userStatus) method");
+    }
+
+    private User getUserById(Long userId) {
+        log.info("Entering getUserById(Long userId) method");
+
+        log.info("Trying to get user by ID: {}", userId);
+
+        User userById = userRepository.findById(userId).orElseThrow(() ->
+                new UserNotFoundException(ExceptionConstant.USER_NOT_FOUND_BY_ID + userId));
+
+        log.info("Exit getUserById(Long userId) method");
+
+        return userById;
     }
 }

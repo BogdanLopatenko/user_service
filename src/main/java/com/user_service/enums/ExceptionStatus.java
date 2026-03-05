@@ -10,8 +10,6 @@ public enum ExceptionStatus {
     USER_EMAIL_CONFIRMATION_TOKEN_EXPIRED("USER_EMAIL_CONFIRMATION_TOKEN_EXPIRED");
 
 
-
-
     private String name;
 
     ExceptionStatus(String name) {

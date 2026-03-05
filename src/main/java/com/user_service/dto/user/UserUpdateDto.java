@@ -3,21 +3,17 @@ package com.user_service.dto.user;
 import com.user_service.enums.UserRole;
 import com.user_service.enums.UserStatus;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserUpdateDto {
-
-    @NotNull(message = "Id can't be null.")
-    @Positive(message = "Id must be a positive number only.")
-    private Long id;
 
     @Size(message = "Username must be in range > 4 & < 75", min = 4, max = 75)
     private String username;

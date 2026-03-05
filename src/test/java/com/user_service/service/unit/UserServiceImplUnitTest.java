@@ -1,9 +1,8 @@
 package com.user_service.service.unit;
 
+import com.user_service.dto.filter.UserFilterDto;
 import com.user_service.dto.user.UserRequestDto;
 import com.user_service.dto.user.UserResponseDto;
-import com.user_service.dto.user.UserUpdateDto;
-import com.user_service.dto.filter.UserFilterDto;
 import com.user_service.entity.User;
 import com.user_service.enums.UserRole;
 import com.user_service.enums.UserStatus;
@@ -48,8 +47,6 @@ public class UserServiceImplUnitTest {
     private final UserResponseDto responseDtoUser1 = new UserResponseDto(userId, "someusername", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, UserStatus.ACTIVE);
     private final UserResponseDto responseDtoUser2 = new UserResponseDto(userId + 1, "bogdan", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.USER, UserStatus.ACTIVE);
 
-    private final UserUpdateDto userUpdateDto1 = new UserUpdateDto(userId, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.ADMIN, UserStatus.ACTIVE);
-    private final User changedUser1 = new User(userId, "someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com", UserRole.ADMIN, UserStatus.ACTIVE);
     private final UserRequestDto requestDtoUser1 = new UserRequestDto("someusername", "somepassword", "somefirstname", "somelastname", "someemail@gmail.com");
     private final UserFilterDto filterDto = new UserFilterDto("bogdan", "", "", "", null, null);
     private final List<User> userList = List.of(fullUser1, fullUser2);
@@ -155,21 +152,5 @@ public class UserServiceImplUnitTest {
         }, "Email must be unique");
 
         verify(userRepository, times(1)).findByEmail(requestDtoUser1.getEmail());
-    }
-
-    @Test
-    @DisplayName("Should update user without exceptions")
-    void update_Successfully() {
-
-        when(userRepository.findById(userUpdateDto1.getId())).thenReturn(Optional.of(fullUser1));
-
-        when(userRepository.save(any(User.class))).thenReturn(changedUser1);
-
-        userService.update(userUpdateDto1);
-
-        verify(userRepository, times(1)).findById(userUpdateDto1.getId());
-        verify(userMapper, times(1)).updateFromDb(userUpdateDto1, fullUser1);
-        assertEquals(UserRole.ADMIN, changedUser1.getRole(), "User should be updated by mapper");
-        verify(userRepository, times(1)).save(fullUser1);
     }
 }

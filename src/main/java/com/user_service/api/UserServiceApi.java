@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @Tag(name = "Users", description = "Operations for managing users")
-public interface UserApi {
+public interface UserServiceApi {
 
     @Operation(summary = "Search users", description = "Search users based on filter criteria.")
     @ApiResponses({
