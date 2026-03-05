@@ -1,6 +1,6 @@
 package com.user_service.controller;
 
-import com.user_service.api.UserApi;
+import com.user_service.api.UserServiceApi;
 import com.user_service.dto.filter.UserFilterDto;
 import com.user_service.dto.user.UserAuthDto;
 import com.user_service.dto.user.UserRequestDto;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/users")
 @RestController
 @RequiredArgsConstructor
-public class UserController implements UserApi {
+public class UserServiceServiceController  implements UserServiceApi {
 
     private final UserService userService;
 
@@ -35,7 +35,7 @@ public class UserController implements UserApi {
     }
 
     @GetMapping("/by-token/{token}")
-    public UserResponseDto getUserByConfirmationToken(@PathVariable String token){
+    public UserResponseDto getUserByConfirmationToken(@PathVariable String token) {
 
         return emailConfirmationService.getUserByConfirmationToken(token);
     }
@@ -59,13 +59,13 @@ public class UserController implements UserApi {
     }
 
     @GetMapping("/generate-token/{userId}")
-    public String generateEmailConfirmationToken(@PathVariable Long userId){
+    public String generateEmailConfirmationToken(@PathVariable Long userId) {
 
         return String.valueOf(emailConfirmationService.create(userId).getToken());
     }
 
-    @GetMapping("/confirm-email/{token}")
-    public void verifyUsersEmail(@PathVariable String token){
+    @GetMapping("/verify-email/{token}")
+    public void verifyUserEmail(@PathVariable String token) {
 
         emailConfirmationService.confirmEmail(token);
     }
