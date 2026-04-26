@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option java_package = "com.user_service.generated";
+option java_multiple_files = true;
+
+package user;
+
+service UserService {
+
+  rpc GetByUsername (Username) returns (UserAuthDto);
+
+  rpc GetUserByConfirmationToken (ConfirmationToken) returns (UserResponseDto);
+
+  rpc Create (UserRequestDto) returns (UserResponseDto);
+
+  rpc GenerateEmailVerificationToken (UserId) returns (ConfirmationToken);
+
+  rpc VerifyUserEmail (ConfirmationToken) returns (google.protobuf.Empty);
+}
+
+message UserResponseDto {
+
+  int64 id = 1;
+  string username = 2;
+  string firstname = 3;
+  string lastname = 4;
+  string email = 5;
+  UserRole role = 6;
+  UserStatus status = 7;
+}
+
+message UserRequestDto {
+
+  string username = 1;
+  string password = 2;
+  string firstname = 3;
+  string lastname = 4;
+  string email = 5;
+}
+
+message UserAuthDto {
+
+  string username = 1;
+  string password = 2;
+  string email = 3;
+  UserRole role = 4;
+}
+
+enum UserRole {
+
+  USER_ROLE_UNSPECIFIED = 0;
+  USER = 1;
+  ADMIN = 2;
+}
+
+enum UserStatus {
+
+  USER_STATUS_UNSPECIFIED = 0;
+  ACTIVE = 1;
+  DISABLED = 2;
+  NEED_EMAIL_CONFIRMATION = 3;
+}
+
+message UserId {
+
+  int64 id = 1;
+}
+
+message Username {
+
+  string username = 1;
+}
+
+message ConfirmationToken {
+
+  string token = 1;
+}
