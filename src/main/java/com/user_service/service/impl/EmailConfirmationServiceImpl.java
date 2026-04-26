@@ -7,7 +7,7 @@ import com.user_service.entity.EmailConfirmation;
 import com.user_service.entity.User;
 import com.user_service.enums.UserStatus;
 import com.user_service.exception.EmailConfirmationTokenExpirationException;
-import com.user_service.exception.EmailIsAlreadyActivatedException;
+import com.user_service.exception.EmailAlreadyActivatedException;
 import com.user_service.exception.UserEmailConfirmationNotFoundException;
 import com.user_service.exception.UserNotFoundException;
 import com.user_service.mapper.EmailConfirmationMapper;
@@ -82,7 +82,7 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
             log.warn("Email confirmation token already has been activated");
 
-            throw new EmailIsAlreadyActivatedException(ExceptionConstant.EMAIL_IS_ALREADY_ACTIVATED);
+            throw new EmailAlreadyActivatedException(ExceptionConstant.EMAIL_ALREADY_ACTIVATED);
         }
 
         confirmationByToken.setIsUsed(true);
