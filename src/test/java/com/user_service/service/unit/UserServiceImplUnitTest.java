@@ -6,9 +6,9 @@ import com.user_service.dto.user.UserResponseDto;
 import com.user_service.entity.User;
 import com.user_service.enums.UserRole;
 import com.user_service.enums.UserStatus;
-import com.user_service.exception.EmailIsAlreadyExistException;
+import com.user_service.exception.EmailAlreadyExistException;
 import com.user_service.exception.UserNotFoundException;
-import com.user_service.exception.UsernameIsAlreadyExistException;
+import com.user_service.exception.UsernameAlreadyExistException;
 import com.user_service.mapper.UserMapper;
 import com.user_service.repository.UserRepository;
 import com.user_service.service.impl.UserServiceImpl;
@@ -134,7 +134,7 @@ public class UserServiceImplUnitTest {
 
         when(userRepository.findByUsername(requestDtoUser1.getUsername())).thenReturn(Optional.of(fullUser1));
 
-        assertThrows(UsernameIsAlreadyExistException.class, () -> {
+        assertThrows(UsernameAlreadyExistException.class, () -> {
             userService.createWithRole(requestDtoUser1, UserRole.USER);
         }, "Username must be unique");
 
@@ -147,7 +147,7 @@ public class UserServiceImplUnitTest {
 
         when(userRepository.findByEmail(requestDtoUser1.getEmail())).thenReturn(Optional.of(fullUser1));
 
-        assertThrows(EmailIsAlreadyExistException.class, () -> {
+        assertThrows(EmailAlreadyExistException.class, () -> {
             userService.createWithRole(requestDtoUser1, UserRole.USER);
         }, "Email must be unique");
 
