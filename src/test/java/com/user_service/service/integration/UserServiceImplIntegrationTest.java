@@ -7,9 +7,9 @@ import com.user_service.dto.filter.UserFilterDto;
 import com.user_service.entity.User;
 import com.user_service.enums.UserRole;
 import com.user_service.enums.UserStatus;
-import com.user_service.exception.EmailIsAlreadyExistException;
+import com.user_service.exception.EmailAlreadyExistException;
 import com.user_service.exception.UserNotFoundException;
-import com.user_service.exception.UsernameIsAlreadyExistException;
+import com.user_service.exception.UsernameAlreadyExistException;
 import com.user_service.repository.UserRepository;
 import com.user_service.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -94,7 +94,7 @@ public class UserServiceImplIntegrationTest {
 
         UserRequestDto user = new UserRequestDto("someusername45", "somepassword", "somename", "somelastname", "someemail@gmail.com");
 
-        assertThrows(EmailIsAlreadyExistException.class, () -> {
+        assertThrows(EmailAlreadyExistException.class, () -> {
             userService.createWithRole(user, UserRole.USER);
         }, "Should throw exception");
     }
@@ -105,7 +105,7 @@ public class UserServiceImplIntegrationTest {
 
         UserRequestDto user = new UserRequestDto("someusername", "somepassword", "somename", "somelastname", "someemail2@gmail.com");
 
-        assertThrows(UsernameIsAlreadyExistException.class, () -> {
+        assertThrows(UsernameAlreadyExistException.class, () -> {
             userService.createWithRole(user, UserRole.USER);
         }, "Should throw exception");
     }

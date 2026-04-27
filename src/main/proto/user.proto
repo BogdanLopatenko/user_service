@@ -77,3 +77,10 @@ message ConfirmationToken {
 
   string token = 1;
 }
+
+message ErrorInfo {
+
+  string code = 1;
+
+  string message = 2;
+}

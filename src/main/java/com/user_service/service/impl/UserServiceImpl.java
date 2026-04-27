@@ -10,9 +10,9 @@ import com.user_service.dto.user.UserUpdateDto;
 import com.user_service.entity.User;
 import com.user_service.enums.UserRole;
 import com.user_service.enums.UserStatus;
-import com.user_service.exception.EmailIsAlreadyExistException;
+import com.user_service.exception.EmailAlreadyExistException;
 import com.user_service.exception.UserNotFoundException;
-import com.user_service.exception.UsernameIsAlreadyExistException;
+import com.user_service.exception.UsernameAlreadyExistException;
 import com.user_service.mapper.UserMapper;
 import com.user_service.repository.UserRepository;
 import com.user_service.service.UserService;
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
         log.info("Checking unique email: {}", email);
 
         repository.findByEmail(email).ifPresent(e -> {
-            throw new EmailIsAlreadyExistException(ExceptionConstant.EMAIL_IS_ALREADY_EXIST + email);
+            throw new EmailAlreadyExistException(ExceptionConstant.EMAIL_IS_ALREADY_EXIST + email);
         });
 
         log.info("Email {} is unique", email);
@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
         log.info("Checking unique email: {}", username);
 
         repository.findByUsername(username).ifPresent(e -> {
-            throw new UsernameIsAlreadyExistException(ExceptionConstant.USERNAME_IS_ALREADY_EXIST + username);
+            throw new UsernameAlreadyExistException(ExceptionConstant.USERNAME_IS_ALREADY_EXIST + username);
         });
 
         log.info("Username {} is unique", username);
