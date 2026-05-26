@@ -1,12 +1,15 @@
 package com.user_service.service;
 
+import com.user_service.dto.user.UserRequestDto;
+import com.user_service.dto.user.UserResponseDto;
+import com.user_service.dto.user.UserUpdateDto;
 import com.user_service.entity.User;
 import com.user_service.enums.UserRole;
 import com.user_service.enums.UserStatus;
 
 public class UserTestBuilder {
 
-    private Long id = 0L;
+    private Long id = 1L;
 
     private String username = "testusername";
 
@@ -20,7 +23,7 @@ public class UserTestBuilder {
 
     private UserRole role = UserRole.USER;
 
-    private UserStatus status = UserStatus.ACTIVE;
+    private UserStatus status = UserStatus.NEED_EMAIL_CONFIRMATION;
 
     public UserTestBuilder withId(Long id) {
 
@@ -78,10 +81,47 @@ public class UserTestBuilder {
         return this;
     }
 
-    public User build(){
+    public User build() {
 
         return new User(
                 id,
+                username,
+                password,
+                firstname,
+                lastname,
+                email,
+                role,
+                status
+        );
+    }
+
+    public UserResponseDto buildResponseDto() {
+
+        return new UserResponseDto(
+                id,
+                username,
+                firstname,
+                lastname,
+                email,
+                role,
+                status
+        );
+    }
+
+    public UserRequestDto buildRequestDto(){
+
+        return new UserRequestDto(
+                username,
+                password,
+                firstname,
+                lastname,
+                email
+        );
+    }
+
+    public UserUpdateDto buildUpdateDto(){
+
+        return new UserUpdateDto(
                 username,
                 password,
                 firstname,
