@@ -5,7 +5,7 @@ import com.user_service.enums.ExceptionStatus;
 import com.user_service.exception.EmailConfirmationTokenExpirationException;
 import com.user_service.exception.EmailAlreadyActivatedException;
 import com.user_service.exception.EmailAlreadyExistException;
-import com.user_service.exception.UserEmailConfirmationNotFoundException;
+import com.user_service.exception.EmailConfirmationNotFoundException;
 import com.user_service.exception.UserNotFoundException;
 import com.user_service.exception.UsernameAlreadyExistException;
 import com.user_service.generated.ErrorInfo;
@@ -69,8 +69,8 @@ public class GlobalExceptionHandler {
         return StatusProto.toStatusRuntimeException(status);
     }
 
-    @ExceptionHandler(UserEmailConfirmationNotFoundException.class)
-    public StatusRuntimeException handleUserEmailConfirmationNotFoundException(UserEmailConfirmationNotFoundException exception) {
+    @ExceptionHandler(EmailConfirmationNotFoundException.class)
+    public StatusRuntimeException handleUserEmailConfirmationNotFoundException(EmailConfirmationNotFoundException exception) {
 
         ErrorInfo errorInfo = ErrorInfo.newBuilder()
                 .setErrorCode(ExceptionStatus.USER_EMAIL_CONFIRMATION_NOT_FOUND.name())

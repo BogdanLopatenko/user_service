@@ -8,7 +8,7 @@ import com.user_service.entity.User;
 import com.user_service.enums.UserStatus;
 import com.user_service.exception.EmailConfirmationTokenExpirationException;
 import com.user_service.exception.EmailAlreadyActivatedException;
-import com.user_service.exception.UserEmailConfirmationNotFoundException;
+import com.user_service.exception.EmailConfirmationNotFoundException;
 import com.user_service.exception.UserNotFoundException;
 import com.user_service.mapper.EmailConfirmationMapper;
 import com.user_service.mapper.UserMapper;
@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -29,7 +30,7 @@ import java.util.UUID;
 public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
     @Value("${email-confirmation.token.expiration-durability}")
-    private Short expirationDurabilityInHours;
+    private final Short expirationDurabilityInHours;
 
     private final UserRepository userRepository;
 
@@ -39,6 +40,7 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
     private final EmailConfirmationRepository emailConfirmationRepository;
 
+    private final Clock clock;
 
     @Override
     public EmailConfirmationResponseDto create(Long userId) {
@@ -51,7 +53,7 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
         log.info("User by ID was successfully got");
 
-        EmailConfirmation constructedEmailConfirmation = emailConfirmationMapper.construct(userById, LocalDateTime.now().plusHours(expirationDurabilityInHours), false);
+        EmailConfirmation constructedEmailConfirmation = emailConfirmationMapper.construct(userById, LocalDateTime.now(clock).plusHours(expirationDurabilityInHours), false);
 
         log.info("Trying to save email confirmation entity");
 
@@ -71,7 +73,7 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
         log.info("Email confirmation token was found: {}", token);
 
-        if (LocalDateTime.now().isAfter(confirmationByToken.getExpiresAt())) {
+        if (LocalDateTime.now(clock).isAfter(confirmationByToken.getExpiresAt())) {
 
             log.warn("Email confirmation toke has been expired at: {} hours, {} minutes", confirmationByToken.getExpiresAt().getHour(), confirmationByToken.getExpiresAt().getMinute());
 
@@ -119,7 +121,7 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
         log.info("Tying to get entity by UUID token: {}", token);
 
         EmailConfirmation emailConfirmation = emailConfirmationRepository.findById(token).orElseThrow(() ->
-                new UserEmailConfirmationNotFoundException(ExceptionConstant.EMAIL_CONFIRMATION_NOT_FOUND_BY_TOKEN + token));
+                new EmailConfirmationNotFoundException(ExceptionConstant.EMAIL_CONFIRMATION_NOT_FOUND_BY_TOKEN + token));
 
         log.info("Exit findByToken(UUID token) method");
         return emailConfirmation;
