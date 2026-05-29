@@ -5,7 +5,7 @@ import com.user_service.enums.ExceptionStatus;
 import com.user_service.exception.EmailConfirmationTokenExpirationException;
 import com.user_service.exception.EmailAlreadyActivatedException;
 import com.user_service.exception.EmailAlreadyExistException;
-import com.user_service.exception.UserEmailConfirmationNotFoundException;
+import com.user_service.exception.EmailConfirmationNotFoundException;
 import com.user_service.exception.UserNotFoundException;
 import com.user_service.exception.UsernameAlreadyExistException;
 import com.user_service.generated.ErrorInfo;
@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     public StatusRuntimeException handleUserNotFoundException(UserNotFoundException exception) {
 
         ErrorInfo errorInfo = ErrorInfo.newBuilder()
-                .setCode(ExceptionStatus.USER_NOT_FOUND.name())
+                .setErrorCode(ExceptionStatus.USER_NOT_FOUND.name())
                 .setMessage(exception.getMessage())
                 .build();
 
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     public StatusRuntimeException handleEmailIsAlreadyExistException(EmailAlreadyExistException exception) {
 
         ErrorInfo errorInfo = ErrorInfo.newBuilder()
-                .setCode(ExceptionStatus.EMAIL_ALREADY_EXIST.name())
+                .setErrorCode(ExceptionStatus.EMAIL_ALREADY_EXIST.name())
                 .setMessage(exception.getMessage())
                 .build();
 
@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
     public StatusRuntimeException handleUsernameIsAlreadyExistException(UsernameAlreadyExistException exception) {
 
         ErrorInfo errorInfo = ErrorInfo.newBuilder()
-                .setCode(ExceptionStatus.USERNAME_ALREADY_EXIST.name())
+                .setErrorCode(ExceptionStatus.USERNAME_ALREADY_EXIST.name())
                 .setMessage(exception.getMessage())
                 .build();
 
@@ -69,11 +69,11 @@ public class GlobalExceptionHandler {
         return StatusProto.toStatusRuntimeException(status);
     }
 
-    @ExceptionHandler(UserEmailConfirmationNotFoundException.class)
-    public StatusRuntimeException handleUserEmailConfirmationNotFoundException(UserEmailConfirmationNotFoundException exception) {
+    @ExceptionHandler(EmailConfirmationNotFoundException.class)
+    public StatusRuntimeException handleUserEmailConfirmationNotFoundException(EmailConfirmationNotFoundException exception) {
 
         ErrorInfo errorInfo = ErrorInfo.newBuilder()
-                .setCode(ExceptionStatus.USER_EMAIL_CONFIRMATION_NOT_FOUND.name())
+                .setErrorCode(ExceptionStatus.USER_EMAIL_CONFIRMATION_NOT_FOUND.name())
                 .setMessage(exception.getMessage())
                 .build();
 
@@ -90,7 +90,7 @@ public class GlobalExceptionHandler {
     public StatusRuntimeException handleEmailConfirmationTokenExpirationException(EmailConfirmationTokenExpirationException exception) {
 
         ErrorInfo errorInfo = ErrorInfo.newBuilder()
-                .setCode(ExceptionStatus.USER_EMAIL_CONFIRMATION_TOKEN_EXPIRED.name())
+                .setErrorCode(ExceptionStatus.USER_EMAIL_CONFIRMATION_TOKEN_EXPIRED.name())
                 .setMessage(exception.getMessage())
                 .build();
 
@@ -107,7 +107,7 @@ public class GlobalExceptionHandler {
     public StatusRuntimeException handleEmailIsAlreadyActivatedException(EmailAlreadyActivatedException exception) {
 
         ErrorInfo errorInfo = ErrorInfo.newBuilder()
-                .setCode(ExceptionStatus.EMAIL_ALREADY_ACTIVATED.name())
+                .setErrorCode(ExceptionStatus.EMAIL_ALREADY_ACTIVATED.name())
                 .setMessage(exception.getMessage())
                 .build();
 
