@@ -15,6 +15,8 @@ public final class ExceptionConstant {
 
     public static final String EMAIL_ALREADY_ACTIVATED = "Email is already activated.";
 
+    public static final String UNEXPECTED_INTERNAL_ERROR = "Unexpected internal error";
+
     private ExceptionConstant() {
     }
 }
