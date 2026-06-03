@@ -1,6 +1,7 @@
 package com.user_service.grpc;
 
 import com.google.protobuf.Empty;
+import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.enums.UserRole;
 import com.user_service.generated.ConfirmationToken;
 import com.user_service.generated.UserAuthDto;
@@ -15,15 +16,13 @@ import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
 
-import java.util.UUID;
-
 @GrpcService
 @RequiredArgsConstructor
 public class UserServiceGrpcImpl extends com.user_service.generated.UserServiceGrpc.UserServiceImplBase {
 
     private final UserService userService;
 
-    private final UserProtoMapper userMapper;
+    private final UserProtoMapper userProtoMapper;
 
     private final EmailConfirmationService emailConfirmationService;
 
@@ -34,7 +33,7 @@ public class UserServiceGrpcImpl extends com.user_service.generated.UserServiceG
 
         com.user_service.dto.user.UserAuthDto byUsername = userService.getByUsername(username);
 
-        UserAuthDto authDto = userMapper.toProtoAuthDto(byUsername);
+        UserAuthDto authDto = userProtoMapper.toProtoAuthDto(byUsername);
 
         responseObserver.onNext(authDto);
         responseObserver.onCompleted();
@@ -47,7 +46,7 @@ public class UserServiceGrpcImpl extends com.user_service.generated.UserServiceG
 
         com.user_service.dto.user.UserResponseDto userByConfirmationToken = emailConfirmationService.getUserByConfirmationToken(confirmationToken);
 
-        UserResponseDto responseDto = userMapper.toProtoResponseDto(userByConfirmationToken);
+        UserResponseDto responseDto = userProtoMapper.toProtoResponseDto(userByConfirmationToken);
 
         responseObserver.onNext(responseDto);
         responseObserver.onCompleted();
@@ -56,24 +55,25 @@ public class UserServiceGrpcImpl extends com.user_service.generated.UserServiceG
     @Override
     public void create(UserRequestDto request, StreamObserver<UserResponseDto> responseObserver) {
 
-        com.user_service.dto.user.UserRequestDto userRequestDto = userMapper.toRequestDtoFromProtoDto(request);
+        com.user_service.dto.user.UserRequestDto userRequestDto = userProtoMapper.toRequestDtoFromProtoDto(request);
 
         com.user_service.dto.user.UserResponseDto createdUser = userService.createWithRole(userRequestDto, UserRole.USER);
 
-        UserResponseDto grpcResponseDto = userMapper.toProtoResponseDto(createdUser);
+        UserResponseDto grpcResponseDto = userProtoMapper.toProtoResponseDto(createdUser);
 
         responseObserver.onNext(grpcResponseDto);
         responseObserver.onCompleted();
     }
 
     @Override
-    public void generateEmailVerificationToken(UserId request, StreamObserver<ConfirmationToken> responseObserver) {
+    public void generateEmailVerificationToken(UserId userid, StreamObserver<ConfirmationToken> responseObserver) {
 
-        UUID token = emailConfirmationService.create(request.getId()).getToken();
+        EmailConfirmationResponseDto emailConfirmationResponseDto =
+                emailConfirmationService.create(userid.getId());
 
-        String tokenAsString = String.valueOf(token);
-
-        ConfirmationToken confirmationToken = ConfirmationToken.newBuilder().setToken(tokenAsString).build();
+        ConfirmationToken confirmationToken = ConfirmationToken.newBuilder()
+                .setToken(String.valueOf(emailConfirmationResponseDto))
+                .build();
 
         responseObserver.onNext(confirmationToken);
         responseObserver.onCompleted();
