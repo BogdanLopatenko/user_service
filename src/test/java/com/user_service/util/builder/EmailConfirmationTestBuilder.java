@@ -1,4 +1,4 @@
-package com.user_service.service;
+package com.user_service.util.builder;
 
 import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.entity.EmailConfirmation;
@@ -58,6 +58,5 @@ public class EmailConfirmationTestBuilder {
                 expiresAt,
                 isUsed
         );
-
     }
 }
