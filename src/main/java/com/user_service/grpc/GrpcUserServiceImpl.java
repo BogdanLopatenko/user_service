@@ -18,7 +18,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 
 @GrpcService
 @RequiredArgsConstructor
-public class UserServiceGrpcImpl extends com.user_service.generated.UserServiceGrpc.UserServiceImplBase {
+public class GrpcUserServiceImpl extends com.user_service.generated.UserServiceGrpc.UserServiceImplBase {
 
     private final UserService userService;
 

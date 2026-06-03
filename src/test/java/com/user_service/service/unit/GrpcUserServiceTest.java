@@ -15,7 +15,7 @@ import com.user_service.generated.ConfirmationToken;
 import com.user_service.generated.UserId;
 import com.user_service.generated.UserResponseDto;
 import com.user_service.generated.Username;
-import com.user_service.grpc.UserServiceGrpcImpl;
+import com.user_service.grpc.GrpcUserServiceImpl;
 import com.user_service.mapper.UserProtoMapper;
 import com.user_service.service.UserService;
 import com.user_service.service.impl.EmailConfirmationServiceImpl;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceGrpcUnitTest {
+public class GrpcUserServiceTest {
 
     @Mock
     private UserService userService;
@@ -56,7 +56,7 @@ public class UserServiceGrpcUnitTest {
     private StreamObserver<Empty> emptyResponseObserver;
 
     @InjectMocks
-    private UserServiceGrpcImpl grpcService;
+    private GrpcUserServiceImpl grpcService;
 
 
     @Test
