@@ -16,7 +16,6 @@ import com.user_service.repository.UserRepository;
 import com.user_service.service.impl.EmailConfirmationServiceImpl;
 import com.user_service.util.builder.EmailConfirmationTestBuilder;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -77,7 +76,6 @@ public class EmailConfirmationServiceTest {
 
 
     @Test
-    @DisplayName("Should create email confirmation and return dto")
     void create_Success_ReturnDto() {
 
         User user = initUser();
@@ -101,7 +99,6 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw a UserNotFoundException when user does not exist")
     void create_UserNotFound_ThrowsException() {
 
         User user = initUser();
@@ -122,7 +119,6 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    @DisplayName("Should change users status and confirmation flag")
     void confirmEmail_Success_ChangeUserStatusToActive() {
 
         EmailConfirmation emailConfirmation = initEmailConfirmation();
@@ -143,7 +139,6 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    @DisplayName("")
     void confirmEmail_EmailConfirmationNotFoundException_ThrowsException() {
 
         EmailConfirmation emailConfirmation = initEmailConfirmation();
@@ -162,7 +157,6 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw EmailConfirmationTokenExpirationException when expiration date is on ")
     void confirmEmail_EmailConfirmationTokenExpiration_ThrowsException() {
 
         EmailConfirmation expiredEmailConfirmation = new EmailConfirmationTestBuilder()
@@ -182,7 +176,6 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw EmailAlreadyActivatedException when isUsed flag == true")
     void confirmEmail_EmailAlreadyActivated_ThrowsException() {
 
         User user = initUser();
@@ -204,7 +197,6 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    @DisplayName("Should find User by confirmation token and return UserResponseDto")
     void getUserByConfirmationToken_Success_ReturnDto() {
 
         EmailConfirmation emailConfirmation = initEmailConfirmation();
@@ -223,7 +215,6 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw EmailConfirmationNotFoundException when token not found")
     void getUserByConfirmationToken_EmailConfirmationNotFound_ThrowsException() {
 
         EmailConfirmation emailConfirmation = initEmailConfirmation();
