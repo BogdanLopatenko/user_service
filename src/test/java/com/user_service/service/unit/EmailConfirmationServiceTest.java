@@ -36,7 +36,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class EmailConfirmationServiceUnitTest {
+public class EmailConfirmationServiceTest {
 
     private Short expirationDurabilityInHours = 6;
 
