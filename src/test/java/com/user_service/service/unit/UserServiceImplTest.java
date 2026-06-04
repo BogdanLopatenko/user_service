@@ -11,9 +11,7 @@ import com.user_service.exception.UserNotFoundException;
 import com.user_service.exception.UsernameAlreadyExistException;
 import com.user_service.mapper.UserMapper;
 import com.user_service.repository.UserRepository;
-import com.user_service.service.UserTestBuilder;
 import com.user_service.service.impl.UserServiceImpl;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,11 +20,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static com.user_service.util.TestEntityFactory.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceImplUnitTest {
+public class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
@@ -37,21 +36,11 @@ public class UserServiceImplUnitTest {
     @InjectMocks
     private UserServiceImpl userService;
 
-    private final User user = new UserTestBuilder().build();
-
-    private final User updatedUser = new UserTestBuilder().withStatus(UserStatus.ACTIVE).build();
-    private final UserResponseDto userResponseDto = new UserTestBuilder().buildResponseDto();
-
-    private final UserRequestDto userRequestDto = new UserTestBuilder().buildRequestDto();
-
-    private final UserUpdateDto userUpdateDto = new UserTestBuilder().withStatus(UserStatus.ACTIVE).buildUpdateDto();
-
-
-
-
     @Test
-    @DisplayName("Should return response dto when user exists")
     void getById_UserExists_ReturnDto() {
+
+        User user = initUser();
+        UserResponseDto userResponseDto = initUserResponseDto();
 
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
 
@@ -67,7 +56,6 @@ public class UserServiceImplUnitTest {
     }
 
     @Test
-    @DisplayName("Should throw UserNotFoundException when user does not exist")
     void getById_UserNotFound_ThrowsException() {
 
         Long notExistingId = 20900909L;
@@ -83,8 +71,11 @@ public class UserServiceImplUnitTest {
 
 
     @Test
-    @DisplayName("Should create user successfully.")
     void createWithRole_Success_ReturnDto() {
+
+        User user = initUser();
+        UserRequestDto userRequestDto = initUserRequestDto();
+        UserResponseDto userResponseDto = initUserResponseDto();
 
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
@@ -110,8 +101,10 @@ public class UserServiceImplUnitTest {
     }
 
     @Test
-    @DisplayName("Should throw UsernameIsAlreadyExistException")
     void createWithRole_UsernameAlreadyExist_ThrowsException() {
+
+        User user = initUser();
+        UserRequestDto userRequestDto = initUserRequestDto();
 
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
@@ -124,8 +117,10 @@ public class UserServiceImplUnitTest {
     }
 
     @Test
-    @DisplayName("Should throw UsernameIsAlreadyExistException")
     void createWithRole_EmailAlreadyExist_ThrowsException() {
+
+        User user = initUser();
+        UserRequestDto userRequestDto = initUserRequestDto();
 
         when(userRepository.findByEmail(userRequestDto.getEmail())).thenReturn(Optional.of(user));
 
@@ -138,11 +133,13 @@ public class UserServiceImplUnitTest {
     }
 
     @Test
-    @DisplayName("Should update user successfully")
     void update_Success_ReturnNothing() {
 
+        User user = initUser();
+        UserUpdateDto userUpdateDto = initUserUpdateDto();
+
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(userRepository.save(user)).thenReturn(updatedUser);
+        when(userRepository.save(user)).thenReturn(user);
 
         userService.update(user.getId(), userUpdateDto);
 
@@ -151,8 +148,10 @@ public class UserServiceImplUnitTest {
     }
 
     @Test
-    @DisplayName("Should throw UserNotFoundException")
     void update_UserNotFound_ThrowsException() {
+
+        UserUpdateDto userUpdateDto = initUserUpdateDto();
+        User user = initUser();
 
         when(userRepository.findById(2L)).thenReturn(Optional.empty());
 

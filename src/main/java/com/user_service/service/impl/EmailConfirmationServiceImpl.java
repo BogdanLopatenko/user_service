@@ -1,5 +1,6 @@
 package com.user_service.service.impl;
 
+import com.user_service.config.properties.EmailConfigurationProperties;
 import com.user_service.constant.ExceptionConstant;
 import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.dto.user.UserResponseDto;
@@ -17,7 +18,6 @@ import com.user_service.repository.UserRepository;
 import com.user_service.service.EmailConfirmationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -29,8 +29,7 @@ import java.util.UUID;
 @Slf4j
 public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
-    @Value("${email-confirmation.token.expiration-durability}")
-    private final Short expirationDurabilityInHours;
+    private final EmailConfigurationProperties emailConfigurationProperties;
 
     private final UserRepository userRepository;
 
@@ -53,7 +52,7 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
         log.info("User by ID was successfully got");
 
-        EmailConfirmation constructedEmailConfirmation = emailConfirmationMapper.construct(userById, LocalDateTime.now(clock).plusHours(expirationDurabilityInHours), false);
+        EmailConfirmation constructedEmailConfirmation = emailConfirmationMapper.construct(userById, LocalDateTime.now(clock).plusHours(emailConfigurationProperties.expirationDurability()), false);
 
         log.info("Trying to save email confirmation entity");
 

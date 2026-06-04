@@ -1,11 +1,13 @@
-package com.user_service.service;
+package com.user_service.util.builder;
 
+import com.user_service.dto.user.UserAuthDto;
 import com.user_service.dto.user.UserRequestDto;
 import com.user_service.dto.user.UserResponseDto;
 import com.user_service.dto.user.UserUpdateDto;
 import com.user_service.entity.User;
 import com.user_service.enums.UserRole;
 import com.user_service.enums.UserStatus;
+import com.user_service.generated.UserId;
 
 public class UserTestBuilder {
 
@@ -23,7 +25,11 @@ public class UserTestBuilder {
 
     private UserRole role = UserRole.USER;
 
+    private com.user_service.generated.UserRole protoRole = com.user_service.generated.UserRole.USER;
+
     private UserStatus status = UserStatus.NEED_EMAIL_CONFIRMATION;
+
+    private com.user_service.generated.UserStatus protoStatus = com.user_service.generated.UserStatus.NEED_EMAIL_CONFIRMATION;
 
     public UserTestBuilder withId(Long id) {
 
@@ -108,7 +114,7 @@ public class UserTestBuilder {
         );
     }
 
-    public UserRequestDto buildRequestDto(){
+    public UserRequestDto buildRequestDto() {
 
         return new UserRequestDto(
                 username,
@@ -119,7 +125,7 @@ public class UserTestBuilder {
         );
     }
 
-    public UserUpdateDto buildUpdateDto(){
+    public UserUpdateDto buildUpdateDto() {
 
         return new UserUpdateDto(
                 username,
@@ -132,5 +138,54 @@ public class UserTestBuilder {
         );
     }
 
+    public UserAuthDto buildAuthDto() {
 
+        return new UserAuthDto(
+                username,
+                password,
+                email,
+                role
+        );
+    }
+
+    public com.user_service.generated.UserAuthDto buildProtoAuthDto() {
+
+        return com.user_service.generated.UserAuthDto.newBuilder()
+                .setUsername(username)
+                .setPassword(password)
+                .setEmail(email)
+                .setRole(protoRole)
+                .build();
+    }
+
+    public com.user_service.generated.UserResponseDto buildProtoResponseDto() {
+
+        return com.user_service.generated.UserResponseDto.newBuilder()
+                .setId(id)
+                .setUsername(username)
+                .setFirstname(firstname)
+                .setLastname(lastname)
+                .setEmail(email)
+                .setRole(protoRole)
+                .setStatus(protoStatus)
+                .build();
+    }
+
+    public com.user_service.generated.UserRequestDto buildProtoRequestDto(){
+
+        return com.user_service.generated.UserRequestDto.newBuilder()
+                .setUsername(username)
+                .setPassword(password)
+                .setFirstname(firstname)
+                .setLastname(lastname)
+                .setEmail(email)
+                .build();
+    }
+
+    public UserId buildUserId(){
+
+        return UserId.newBuilder()
+                .setId(id)
+                .build();
+    }
 }
