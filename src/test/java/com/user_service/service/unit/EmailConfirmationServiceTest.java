@@ -1,5 +1,6 @@
 package com.user_service.service.unit;
 
+import com.user_service.config.properties.EmailConfigurationProperties;
 import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.dto.user.UserResponseDto;
 import com.user_service.entity.EmailConfirmation;
@@ -18,6 +19,7 @@ import com.user_service.util.builder.EmailConfirmationTestBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -37,7 +39,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class EmailConfirmationServiceTest {
 
-    private Short expirationDurabilityInHours = 6;
+    @Mock
+    private EmailConfigurationProperties emailConfigurationProperties;
 
     @Mock
     private UserRepository userRepository;
@@ -56,6 +59,7 @@ public class EmailConfirmationServiceTest {
             ZoneOffset.UTC
     );
 
+    @InjectMocks
     private EmailConfirmationServiceImpl emailConfirmationService;
 
     @BeforeEach
@@ -63,7 +67,7 @@ public class EmailConfirmationServiceTest {
 
         emailConfirmationService =
                 new EmailConfirmationServiceImpl(
-                        expirationDurabilityInHours,
+                        emailConfigurationProperties,
                         userRepository,
                         userMapper,
                         emailConfirmationMapper,
@@ -72,14 +76,11 @@ public class EmailConfirmationServiceTest {
                 );
     }
 
-    private final EmailConfirmationResponseDto emailConfirmationResponseDto = new EmailConfirmationTestBuilder().buildResponseDto();
-
-
     @Test
     void create_Success_ReturnDto() {
 
         User user = initUser();
-
+        EmailConfirmationResponseDto emailConfirmationResponseDto = initEmailConfirmationResponseDto();
         EmailConfirmation emailConfirmation = initEmailConfirmation();
 
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
@@ -91,11 +92,11 @@ public class EmailConfirmationServiceTest {
         when(emailConfirmationRepository.save(emailConfirmation)).thenReturn(emailConfirmation);
         when(emailConfirmationMapper.toResponseDto(emailConfirmation)).thenReturn(emailConfirmationResponseDto);
 
-        EmailConfirmationResponseDto emailConfirmationResponseDto = emailConfirmationService.create(user.getId());
+        EmailConfirmationResponseDto emailConfirmationResponseDto2 = emailConfirmationService.create(user.getId());
 
-        assertNotNull(emailConfirmationResponseDto, "result can't be null");
-        assertEquals(emailConfirmationResponseDto.getToken(), emailConfirmation.getToken(), "Must be the same tokens");
-        assertEquals(emailConfirmationResponseDto.getIsUsed(), emailConfirmation.getIsUsed());
+        assertNotNull(emailConfirmationResponseDto2, "result can't be null");
+        assertEquals(emailConfirmationResponseDto2.getToken(), emailConfirmation.getToken(), "Must be the same tokens");
+        assertEquals(emailConfirmationResponseDto2.getIsUsed(), emailConfirmation.getIsUsed());
     }
 
     @Test
