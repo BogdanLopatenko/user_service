@@ -1,4 +1,4 @@
-package com.user_service.service.unit;
+package com.user_service.unit;
 
 import com.google.protobuf.Empty;
 import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
