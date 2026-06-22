@@ -13,7 +13,7 @@ public class EmailConfirmationTestBuilder {
 
     private User user = new UserTestBuilder().build();
 
-    private LocalDateTime expiresAt = LocalDateTime.of(2026,5,28,12,0);
+    private LocalDateTime expiresAt = LocalDateTime.of(2025, 1, 1, 6, 0);
     private Boolean isUsed = false;
 
     public EmailConfirmationTestBuilder withToken(UUID token){
