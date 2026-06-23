@@ -37,7 +37,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class EmailConfirmationServiceTest {
+public class EmailConfirmationServiceImplTest {
 
     @Mock
     private EmailConfigurationProperties emailConfigurationProperties;

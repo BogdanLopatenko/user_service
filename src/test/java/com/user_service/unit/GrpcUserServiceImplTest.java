@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class GrpcUserServiceTest {
+public class GrpcUserServiceImplTest {
 
     @Mock
     private UserService userService;
