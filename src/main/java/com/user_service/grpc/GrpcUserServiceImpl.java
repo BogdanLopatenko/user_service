@@ -72,7 +72,7 @@ public class GrpcUserServiceImpl extends com.user_service.generated.UserServiceG
                 emailConfirmationService.create(userid.getId());
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder()
-                .setToken(String.valueOf(emailConfirmationResponseDto))
+                .setToken(String.valueOf(emailConfirmationResponseDto.getToken()))
                 .build();
 
         responseObserver.onNext(confirmationToken);

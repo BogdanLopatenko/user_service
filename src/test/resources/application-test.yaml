@@ -1,3 +1,13 @@
 spring:
   liquibase:
     enabled: true
+
+grpc:
+  server:
+    in-process-name: test
+    port: -1
+
+  client:
+    inProcess:
+      address: in-process:test
+      negotiation-type: plaintext

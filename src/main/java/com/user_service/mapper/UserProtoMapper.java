@@ -7,6 +7,8 @@ import com.user_service.generated.UserRole;
 import com.user_service.generated.UserStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 public class UserProtoMapper {
 
@@ -45,28 +47,24 @@ public class UserProtoMapper {
 
     private UserRole toProtoUserRole(com.user_service.enums.UserRole role) {
 
-        if (role == null) {
-
-            throw new RuntimeException();//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        }
+        Objects.requireNonNull(role, "Role can't be null");
 
         return switch (role) {
             case USER -> UserRole.USER;
             case ADMIN -> UserRole.ADMIN;
+            default -> throw new IllegalArgumentException("Unknown role: " + role);
         };
     }
 
     private UserStatus toProtoUserStatus(com.user_service.enums.UserStatus status) {
 
-        if (status == null) {
-
-            throw new RuntimeException();//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        }
+        Objects.requireNonNull(status, "Status can't be null");
 
         return switch (status) {
             case ACTIVE -> UserStatus.ACTIVE;
             case DISABLED -> UserStatus.DISABLED;
             case NEED_EMAIL_CONFIRMATION -> UserStatus.NEED_EMAIL_CONFIRMATION;
+            default -> throw new IllegalArgumentException("Unknown status: " + status);
         };
     }
 }
