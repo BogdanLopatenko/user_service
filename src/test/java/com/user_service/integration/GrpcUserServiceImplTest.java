@@ -27,7 +27,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import java.time.Instant;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -56,7 +55,7 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getByUsername_Success_ReturnsUserAuthDto() {
+    void shouldReturnUserAuthDtoWhenUsernameExists() {
 
         User user = new UserTestBuilder().withId(null).build();
         User savedUser = userRepository.save(user);
@@ -70,7 +69,7 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getByUsername_UserNotFound_ThrowsExceptionAndCheckErrorStatus() {
+    void shouldThrowNotFoundWhenUsernameDoesNotExist() {
 
         Username falseUsername = Username.newBuilder().setUsername("falseUsername").build();
 
@@ -83,7 +82,7 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
 
 
     @Test
-    void getUserByConfirmationToken_Success_ReturnsResponseDto() {
+    void shouldReturnUserResponseDtoWhenConfirmationTokenExists() {
 
         User user = new UserTestBuilder().withId(null).build();
         User savedUser = userRepository.saveAndFlush(user);
@@ -99,7 +98,7 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getUserByConfirmationToken_EmailConfirmationNotFound_ThrowsExceptionAndCheckErrorStatus() {
+    void shouldThrowNotFoundWhenConfirmationTokenDoesNotExist() {
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder().setToken(String.valueOf(UUID.randomUUID())).build();
 
@@ -113,18 +112,22 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
 
 
     @Test
-    void create_Success_ReturnsResponseDto() {
+    void shouldCreateUserAndReturnResponseDto() {
 
         UserRequestDto requestDto = new UserTestBuilder().buildProtoRequestDto();
 
-        UserResponseDto responseDto = stub.create(requestDto);
+        UserResponseDto createdUser = stub.create(requestDto);
 
-        assertEquals(requestDto.getEmail(), responseDto.getEmail());
-        assertEquals(requestDto.getUsername(), responseDto.getUsername());
+        User userFromDb = userRepository.findAll().get(0);
+
+        assertEquals(requestDto.getEmail(), createdUser.getEmail());
+        assertEquals(requestDto.getUsername(), createdUser.getUsername());
+        assertEquals(userFromDb.getUsername(), createdUser.getUsername());
+        assertEquals(userFromDb.getEmail(), createdUser.getEmail());
     }
 
     @Test
-    void create_UsernameAlreadyExist_ThrowsExceptionAndCheckErrorStatus() {
+    void shouldThrowAlreadyExistsWhenUsernameAlreadyExists() {
 
         User user = new UserTestBuilder().withId(null).build();
         userRepository.saveAndFlush(user);
@@ -139,7 +142,7 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void create_EmailAlreadyExist_ThrowsExceptionAndCheckErrorStatus() {
+    void shouldThrowAlreadyExistsWhenEmailAlreadyExists() {
 
         User user = new UserTestBuilder().withId(null).withUsername("somenewusername").build();
         userRepository.saveAndFlush(user);
@@ -153,9 +156,8 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
         assertEquals(exception.getStatus().getCode(), Status.Code.ALREADY_EXISTS);
     }
 
-
     @Test
-    void generateEmailVerificationToken_Success_ReturnsConfirmationToken() {
+    void shouldGenerateEmailVerificationTokenForExistingUser() {
 
         User user = new UserTestBuilder().withId(null).build();
         User savedUser = userRepository.saveAndFlush(user);
@@ -164,17 +166,16 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
 
         ConfirmationToken confirmationToken = stub.generateEmailVerificationToken(userId);
 
-        Optional<EmailConfirmation> tokenByID = emailConfirmationRepository.findById(UUID.fromString(confirmationToken.getToken()));
+        EmailConfirmation emailConfirmation = emailConfirmationRepository.findById(UUID.fromString(confirmationToken.getToken())).orElseThrow();
 
-        assertFalse(tokenByID.isEmpty());
-        assertEquals(tokenByID.get().getToken(), UUID.fromString(confirmationToken.getToken()));
+        assertNotNull(emailConfirmation);
+        assertEquals(emailConfirmation.getToken(), UUID.fromString(confirmationToken.getToken()));
     }
 
-
     @Test
-    void generateEmailVerificationToken_UserNotFound_ThrowsExceptionAndCheckErrorStatus() {
+    void shouldThrowNotFoundWhenGeneratingEmailVerificationTokenForNonExistingUser() {
 
-        UserId userId = UserId.newBuilder().setId(2L).build();
+        UserId userId = UserId.newBuilder().setId(9999999L).build();
 
         StatusRuntimeException exception = assertThrows(StatusRuntimeException.class, () -> {
 
@@ -186,7 +187,7 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
 
 
     @Test
-    void verifyUserEmail_Success_UpdateUserStatusAndTokenActivity() {
+    void shouldActivateUserAndMarkTokenAsUsedWhenConfirmationTokenIsValid() {
 
         User user = new UserTestBuilder().withId(null).build();
         User savedUser = userRepository.saveAndFlush(user);
@@ -197,16 +198,16 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder().setToken(String.valueOf(savedConfirmation.getToken())).build();
         stub.verifyUserEmail(confirmationToken);
 
-        User checkUser = userRepository.findById(savedUser.getId()).get();
+        User checkUser = userRepository.findById(savedUser.getId()).orElseThrow();
 
-        EmailConfirmation checkToken = emailConfirmationRepository.findById(savedConfirmation.getToken()).get();
+        EmailConfirmation checkToken = emailConfirmationRepository.findById(savedConfirmation.getToken()).orElseThrow();
 
         assertEquals(checkUser.getStatus(), UserStatus.ACTIVE);
         assertTrue(checkToken.getIsUsed());
     }
 
     @Test
-    void verifyUserEmail_EmailConfirmationTokenExpiration_ThrowsExceptionAndCheckErrorStatus() {
+    void shouldThrowUnauthenticatedWhenConfirmationTokenIsExpired() {
 
         User user = new UserTestBuilder().withId(null).build();
         User savedUser = userRepository.saveAndFlush(user);
@@ -227,7 +228,7 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
 
 
     @Test
-    void verifyUserEmail_EmailAlreadyActivated_ThrowsExceptionAndCheckErrorStatus() {
+    void shouldThrowAlreadyExistsWhenEmailIsAlreadyVerified() {
 
         User user = new UserTestBuilder().withId(null).build();
         User savedUser = userRepository.saveAndFlush(user);
@@ -242,5 +243,17 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
         });
 
         assertEquals(exception.getStatus().getCode(), Status.Code.ALREADY_EXISTS);
+    }
+
+    @Test
+    void shouldThrowEmailConfirmationNotFoundWhenConfirmationNotExist() {
+
+        ConfirmationToken confirmationToken = ConfirmationToken.newBuilder().setToken(String.valueOf(UUID.randomUUID())).build();
+
+        StatusRuntimeException exception = assertThrows(StatusRuntimeException.class, () -> {
+            stub.verifyUserEmail(confirmationToken);
+        });
+
+        assertEquals(Status.Code.NOT_FOUND, exception.getStatus().getCode());
     }
 }
