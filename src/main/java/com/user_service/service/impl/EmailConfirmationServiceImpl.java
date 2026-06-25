@@ -124,7 +124,7 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
         log.info("Tying to get entity by UUID token: {}", token);
 
-        EmailConfirmation emailConfirmation = emailConfirmationRepository.findById(token).orElseThrow(() ->
+        EmailConfirmation emailConfirmation = emailConfirmationRepository.findByToken(token).orElseThrow(() ->
                 new EmailConfirmationNotFoundException(ExceptionConstant.EMAIL_CONFIRMATION_NOT_FOUND_BY_TOKEN + token));
 
         log.info("Exit findByToken(UUID token) method");
