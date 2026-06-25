@@ -9,7 +9,7 @@ import java.time.Clock;
 public class UserServiceConfiguration {
 
     @Bean
-    public Clock clockBean(){
+    public Clock clockBean() {
 
         return Clock.systemUTC();
     }

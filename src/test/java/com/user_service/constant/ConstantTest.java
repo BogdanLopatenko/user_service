@@ -12,7 +12,6 @@ public final class ConstantTest {
     public static final Instant INSTANCE_AFTER = Instant.parse("2025-01-20T00:00:00Z");
 
 
-
     private ConstantTest() {
     }
 }
