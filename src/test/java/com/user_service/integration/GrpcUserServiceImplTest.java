@@ -1,6 +1,6 @@
 package com.user_service.integration;
 
-import com.user_service.AbstractIntegrationTest;
+import com.user_service.AbstractGrpcIntegrationTest;
 import com.user_service.config.ClockTestConfig;
 import com.user_service.constant.ConstantTest;
 import com.user_service.entity.EmailConfirmation;
@@ -25,15 +25,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.UUID;
 
 import static org.junit.Assert.*;
 
 @Import(ClockTestConfig.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
+public class GrpcUserServiceImplTest extends AbstractGrpcIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
