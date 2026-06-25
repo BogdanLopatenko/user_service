@@ -60,7 +60,7 @@ public class GrpcUserServiceImplTest {
 
 
     @Test
-    void getByUsername_success_sendsAuthDto() {
+    void shouldSendAuthDtoWhenUserExistsByUsername() {
 
         UserAuthDto userAuthDto = initUserAuthDto();
 
@@ -85,7 +85,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void getByUsername_userNotFound_throwsException() {
+    void shouldThrowUserNotFoundExceptionWhenUserDoesNotExistByUsername() {
 
         Username username = Username.newBuilder()
                 .setUsername("test")
@@ -104,7 +104,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void getByUsernameByConfirmationToken_success_sendsUserResponseDto() {
+    void shouldSendUserResponseDtoWhenUserExistsByConfirmationToken() {
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder()
                 .setToken("token")
@@ -134,7 +134,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void getByUsernameByConfirmationToken_emailConfirmationNotFound_throwsException() {
+    void shouldThrowEmailConfirmationNotFoundExceptionWhenConfirmationTokenDoesNotExist() {
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder()
                 .setToken("invalid")
@@ -156,7 +156,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void create_success_sendsResponseDto() {
+    void shouldSendResponseDtoWhenUserIsCreatedSuccessfully() {
 
         com.user_service.generated.UserRequestDto protoRequestDto =
                 initUserProtoRequestDto();
@@ -187,7 +187,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void create_emailAlreadyExist_throwsException() {
+    void shouldThrowEmailAlreadyExistExceptionWhenEmailAlreadyExistsDuringCreate() {
 
         com.user_service.generated.UserRequestDto protoRequestDto =
                 initUserProtoRequestDto();
@@ -211,7 +211,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void create_usernameAlreadyExist_throwsException() {
+    void shouldThrowUsernameAlreadyExistExceptionWhenUsernameAlreadyExistsDuringCreate() {
 
         com.user_service.generated.UserRequestDto protoRequestDto =
                 initUserProtoRequestDto();
@@ -235,7 +235,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void generateEmailVerificationToken_success_sendsConfirmationToken() {
+    void shouldSendConfirmationTokenWhenEmailVerificationTokenIsGenerated() {
 
         UserId userId = initUserId();
 
@@ -261,7 +261,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void generateEmailVerificationToken_userNotFound_throwsException() {
+    void shouldThrowUserNotFoundExceptionWhenGeneratingEmailVerificationTokenForNonExistingUser() {
 
         UserId userId = initUserId();
 
@@ -280,7 +280,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void verifyUserEmail_success_confirmsEmail() {
+    void shouldConfirmUserEmailAndSendEmptyResponseWhenTokenIsValid() {
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder()
                 .setToken("token")
@@ -305,7 +305,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void verifyUserEmail_emailConfirmationTokenExpiration_throwsException() {
+    void shouldThrowEmailConfirmationTokenExpirationExceptionWhenEmailConfirmationTokenIsExpired() {
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder()
                 .setToken("expired")
@@ -330,7 +330,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void verifyUserEmail_emailAlreadyActivated_throwsException() {
+    void shouldThrowEmailAlreadyActivatedExceptionWhenEmailIsAlreadyActivated() {
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder()
                 .setToken("activated")

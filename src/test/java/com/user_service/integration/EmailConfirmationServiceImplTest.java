@@ -58,7 +58,7 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void create_Success_CreatesNewEmailConfirmation() {
+    void shouldCreateEmailConfirmationWhenUserExists() {
 
         User user = new UserTestBuilder().withId(null).build();
 
@@ -72,7 +72,7 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void create_UserNotFound_ThrowsException() {
+    void shouldThrowUserNotFoundExceptionWhenUserDoesNotExist() {
 
         assertThrows(UserNotFoundException.class, () -> {
             emailConfirmationService.create(12L);
@@ -80,7 +80,7 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void confirmEmail_Success_ShouldUpdateConfirmationStatusAndUserStatus() {
+    void shouldUpdateConfirmationAndActivateUserWhenTokenIsValid() {
 
         User user = new UserTestBuilder().withId(null).build();
         User savedUser = userRepository.save(user);
@@ -98,7 +98,7 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void confirmEmail_EmailConfirmationTokenExpiration_ThrowsException() {
+    void shouldThrowEmailConfirmationTokenExpirationExceptionWhenTokenIsExpired() {
 
         User user = new UserTestBuilder().withId(null).build();
         User savedUser = userRepository.save(user);
@@ -125,7 +125,7 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void confirmEmail_EmailAlreadyActivated_ThrowsException() {
+    void shouldThrowEmailAlreadyActivatedExceptionWhenEmailAlreadyActivated() {
 
         User user = new UserTestBuilder().withId(null).build();
         User savedUser = userRepository.save(user);
@@ -139,7 +139,7 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getUserByConfirmationToken_Success_ReturnsUserResponseDto() {
+    void shouldReturnUserResponseDtoWhenConfirmationTokenExists() {
 
         User user = new UserTestBuilder().withId(null).build();
         User savedUser = userRepository.save(user);
@@ -154,7 +154,7 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getUserByConfirmationToken_EmailConfirmation_ThrowsException() {
+    void shouldThrowEmailConfirmationNotFoundExceptionWhenConfirmationTokenDoesNotExist() {
 
         EmailConfirmation build = new EmailConfirmationTestBuilder().build();
 

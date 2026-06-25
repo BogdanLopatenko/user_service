@@ -35,7 +35,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     private UserService userService;
 
     @Test
-    void getById_Success_ShouldReturnUser() {
+    void shouldReturnUserWhenUserExistsById() {
 
         User user = new UserTestBuilder().withId(null).build();
 
@@ -50,7 +50,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getById_UserNotFound_ThrowsException() {
+    void shouldThrowUserNotFoundExceptionWhenUserDoesNotExistById() {
 
         assertThrows(UserNotFoundException.class, () -> {
 
@@ -59,7 +59,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void createWithRole_Success_ShouldCreateUserWithRoleAndStatus() {
+    void shouldCreateUserWithRoleAndStatusWhenValidRequest() {
 
         UserRequestDto userRequestDto = new UserTestBuilder().buildRequestDto();
 
@@ -72,7 +72,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void createWithRole_EmailAlreadyExist_ThrowsException() {
+    void shouldThrowEmailAlreadyExistExceptionWhenEmailAlreadyExists() {
 
         User user = new UserTestBuilder().withId(null).withUsername("someotherusername").build();
         userRepository.save(user);
@@ -86,7 +86,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void createWithRole_UsernameAlreadyExist_ThrowsException() {
+    void shouldThrowUsernameAlreadyExistExceptionWhenUsernameAlreadyExists() {
 
         User user = new UserTestBuilder().withId(null).build();
         userRepository.save(user);
@@ -100,7 +100,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void update_Success_ShouldUpdateUserInDb() {
+    void shouldUpdateUserInDatabaseWhenValidUpdateRequest() {
 
         User user = new UserTestBuilder().withId(null).build();
 
@@ -116,7 +116,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void update_DataIntegrityViolation_ThrowsException() {
+    void shouldThrowDataIntegrityViolationExceptionWhenEmailAlreadyExistsDuringUpdate() {
 
         User user = new UserTestBuilder().withUsername("234234").withId(null).build();
         User user2 = new UserTestBuilder().withEmail("newEmail@gmail.com").withId(null).build();
@@ -135,7 +135,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void update_UserNotFound_ThrowsException() {
+    void shouldThrowUserNotFoundExceptionWhenUpdatingNonExistingUser() {
 
         User user = new UserTestBuilder().withId(null).build();
 
@@ -150,7 +150,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getByUsername_Success_ShouldReturnUser() {
+    void shouldReturnUserAuthDtoWhenUserExistsByUsername() {
 
         User user = new UserTestBuilder().withId(null).build();
         userRepository.save(user);
@@ -162,7 +162,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getByUsername_UserNotFound_ThrowsException() {
+    void shouldThrowUserNotFoundExceptionWhenUserDoesNotExistByUsername() {
 
         User user = new UserTestBuilder().withId(null).build();
         userRepository.save(user);
@@ -173,7 +173,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void search_ShouldFindNothing() {
+    void shouldReturnEmptyListWhenNoUsersMatchSearchFilter() {
 
         UserFilterDto userFilterDto = new UserFilterDto();
 
@@ -183,7 +183,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void search_ByRole_ReturnsOnlyWithRoleAdmin() {
+    void shouldReturnOnlyAdminUsersWhenSearchingByRole() {
 
         User userAdmin = new UserTestBuilder()
                 .withUsername("UserAdmin")
@@ -212,7 +212,7 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void search_ByStatus_ReturnsOnlyWithStatusActive() {
+    void shouldReturnOnlyActiveUsersWhenSearchingByStatus() {
 
         User activeUser = new UserTestBuilder()
                 .withUsername("UserAdmin")

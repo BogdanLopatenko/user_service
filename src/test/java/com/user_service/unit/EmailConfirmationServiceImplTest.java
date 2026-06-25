@@ -75,7 +75,7 @@ public class EmailConfirmationServiceImplTest {
     }
 
     @Test
-    void create_Success_ReturnDto() {
+    void shouldReturnEmailConfirmationDtoWhenUserExists() {
 
         User user = initUser();
         EmailConfirmationResponseDto emailConfirmationResponseDto = initEmailConfirmationResponseDto();
@@ -98,7 +98,7 @@ public class EmailConfirmationServiceImplTest {
     }
 
     @Test
-    void create_UserNotFound_ThrowsException() {
+    void shouldThrowUserNotFoundExceptionWhenUserDoesNotExist() {
 
         User user = initUser();
         EmailConfirmation emailConfirmation = initEmailConfirmation();
@@ -118,7 +118,7 @@ public class EmailConfirmationServiceImplTest {
     }
 
     @Test
-    void confirmEmail_Success_ChangeUserStatusToActive() {
+    void shouldChangeUserStatusToActiveWhenEmailConfirmationIsSuccessful() {
 
         EmailConfirmation emailConfirmation = initEmailConfirmation();
         User user = initUser();
@@ -138,7 +138,7 @@ public class EmailConfirmationServiceImplTest {
     }
 
     @Test
-    void confirmEmail_EmailConfirmationNotFoundException_ThrowsException() {
+    void shouldThrowEmailConfirmationNotFoundExceptionWhenEmailConfirmationDoesNotExist() {
 
         EmailConfirmation emailConfirmation = initEmailConfirmation();
         User user = initUser();
@@ -156,7 +156,7 @@ public class EmailConfirmationServiceImplTest {
     }
 
     @Test
-    void confirmEmail_EmailConfirmationTokenExpiration_ThrowsException() {
+    void shouldThrowEmailConfirmationTokenExpirationExceptionWhenTokenIsExpired() {
 
         EmailConfirmation expiredEmailConfirmation = new EmailConfirmationTestBuilder()
                 .withExpiresAt(LocalDateTime.of(2025, 1, 1, 1, 1))
@@ -175,7 +175,7 @@ public class EmailConfirmationServiceImplTest {
     }
 
     @Test
-    void confirmEmail_EmailAlreadyActivated_ThrowsException() {
+    void shouldThrowEmailAlreadyActivatedExceptionWhenEmailIsAlreadyActivated() {
 
         EmailConfirmation confirmedEmailConfirmation = new EmailConfirmationTestBuilder()
                 .withExpiresAt(LocalDateTime.of(2025, 2, 1, 1, 1))
@@ -196,7 +196,7 @@ public class EmailConfirmationServiceImplTest {
     }
 
     @Test
-    void getUserByConfirmationToken_Success_ReturnDto() {
+    void shouldReturnUserResponseDtoWhenConfirmationTokenExists() {
 
         EmailConfirmation emailConfirmation = initEmailConfirmation();
         User user = initUser();
@@ -214,7 +214,7 @@ public class EmailConfirmationServiceImplTest {
     }
 
     @Test
-    void getUserByConfirmationToken_EmailConfirmationNotFound_ThrowsException() {
+    void shouldThrowEmailConfirmationNotFoundExceptionWhenConfirmationTokenDoesNotExist() {
 
         EmailConfirmation emailConfirmation = initEmailConfirmation();
         User user = initUser();
