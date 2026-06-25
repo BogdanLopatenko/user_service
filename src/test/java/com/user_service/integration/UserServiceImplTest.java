@@ -17,7 +17,6 @@ import com.user_service.service.UserService;
 import com.user_service.util.builder.UserTestBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +26,6 @@ import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.*;
 
 @Transactional
-@SpringBootTest
 public class UserServiceImplTest extends AbstractIntegrationTest {
 
     @Autowired

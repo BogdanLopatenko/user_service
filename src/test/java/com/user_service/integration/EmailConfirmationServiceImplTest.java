@@ -21,13 +21,11 @@ import com.user_service.util.builder.UserTestBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.*;
 
-@SpringBootTest
 @Transactional
 @Import(ClockTestConfig.class)
 public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
