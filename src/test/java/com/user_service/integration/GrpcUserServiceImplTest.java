@@ -2,6 +2,7 @@ package com.user_service.integration;
 
 import com.user_service.AbstractIntegrationTest;
 import com.user_service.config.ClockTestConfig;
+import com.user_service.constant.ConstantTest;
 import com.user_service.entity.EmailConfirmation;
 import com.user_service.entity.User;
 import com.user_service.enums.UserStatus;
@@ -25,14 +26,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 
-import java.time.Instant;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
 
 @SpringBootTest
 @Import(ClockTestConfig.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
 
     @Autowired
@@ -52,6 +54,7 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
     void tearDown() {
         emailConfirmationRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
+        clock.setInstant(ConstantTest.DEFAULT_INSTANT);
     }
 
     @Test
@@ -212,10 +215,15 @@ public class GrpcUserServiceImplTest extends AbstractIntegrationTest {
         User user = new UserTestBuilder().withId(null).build();
         User savedUser = userRepository.saveAndFlush(user);
 
-        EmailConfirmation emailConfirmation = new EmailConfirmationTestBuilder().withToken(null).withUser(savedUser).build();
+        EmailConfirmation emailConfirmation = new EmailConfirmationTestBuilder()
+                .withToken(null)
+                .withUser(savedUser)
+                .withExpiresAtInstant(ConstantTest.DEFAULT_INSTANT)
+                .build();
+
         EmailConfirmation savedConfirmation = emailConfirmationRepository.saveAndFlush(emailConfirmation);
 
-        clock.setInstant(Instant.parse("2025-01-02T00:00:00Z"));
+        clock.setInstant(ConstantTest.INSTANCE_AFTER);
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder().setToken(String.valueOf(savedConfirmation.getToken())).build();
 

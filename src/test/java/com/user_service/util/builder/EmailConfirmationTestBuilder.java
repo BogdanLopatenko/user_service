@@ -1,10 +1,13 @@
 package com.user_service.util.builder;
 
+import com.user_service.constant.ConstantTest;
 import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.entity.EmailConfirmation;
 import com.user_service.entity.User;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 public class EmailConfirmationTestBuilder {
@@ -13,7 +16,7 @@ public class EmailConfirmationTestBuilder {
 
     private User user = new UserTestBuilder().build();
 
-    private LocalDateTime expiresAt = LocalDateTime.of(2025, 1, 1, 6, 0);
+    private LocalDateTime expiresAt = LocalDateTime.ofInstant(ConstantTest.INSTANCE_AFTER, ZoneOffset.UTC);
     private Boolean isUsed = false;
 
     public EmailConfirmationTestBuilder withToken(UUID token){
@@ -28,6 +31,12 @@ public class EmailConfirmationTestBuilder {
         return this;
     }
 
+
+    public EmailConfirmationTestBuilder withExpiresAtInstant(Instant expiresAt){
+
+        this.expiresAt = LocalDateTime.ofInstant(expiresAt, ZoneOffset.UTC);;
+        return this;
+    }
     public EmailConfirmationTestBuilder withExpiresAt(LocalDateTime expiresAt){
 
         this.expiresAt = expiresAt;

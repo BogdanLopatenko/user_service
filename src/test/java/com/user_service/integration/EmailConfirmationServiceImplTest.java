@@ -2,6 +2,7 @@ package com.user_service.integration;
 
 import com.user_service.AbstractIntegrationTest;
 import com.user_service.config.ClockTestConfig;
+import com.user_service.constant.ConstantTest;
 import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.dto.user.UserResponseDto;
 import com.user_service.entity.EmailConfirmation;
@@ -24,14 +25,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-
 import static org.junit.Assert.*;
 
 @SpringBootTest
-@Import(ClockTestConfig.class)
 @Transactional
+@Import(ClockTestConfig.class)
 public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
 
     @Autowired
@@ -49,14 +47,14 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
     @AfterEach
     void setDefaultClockDate() {
 
-        clock.setInstant(Instant.parse("2025-01-01T00:00:00Z"));
+        clock.setInstant(ConstantTest.DEFAULT_INSTANT);
     }
 
     @Test
     void shouldUseTestClock() {
 
         assertEquals(
-                Instant.parse("2025-01-01T00:00:00Z"),
+                ConstantTest.DEFAULT_INSTANT,
                 clock.instant()
         );
     }
@@ -108,14 +106,14 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
         User savedUser = userRepository.save(user);
 
         EmailConfirmation emailConfirmation = new EmailConfirmationTestBuilder()
-                .withExpiresAt(LocalDateTime.now(clock).plusHours(2))
                 .withToken(null)
+                .withExpiresAtInstant(ConstantTest.DEFAULT_INSTANT)
                 .withUser(savedUser)
                 .build();
 
         EmailConfirmation savedConfirmationToken = emailConfirmationRepository.save(emailConfirmation);
 
-        clock.setInstant(Instant.parse("2025-01-02T01:00:00Z"));
+        clock.setInstant(ConstantTest.INSTANCE_AFTER);
 
         assertThrows(EmailConfirmationTokenExpirationException.class, () -> {
             emailConfirmationService.confirmEmail(String.valueOf(savedConfirmationToken.getToken()));

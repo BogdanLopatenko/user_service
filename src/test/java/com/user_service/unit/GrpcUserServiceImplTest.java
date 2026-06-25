@@ -251,7 +251,7 @@ public class GrpcUserServiceImplTest {
         );
 
         ConfirmationToken expected = ConfirmationToken.newBuilder()
-                .setToken(String.valueOf(emailConfirmation))
+                .setToken(String.valueOf(emailConfirmation.getToken()))
                 .build();
 
         verify(emailConfirmationService).create(userId.getId());
