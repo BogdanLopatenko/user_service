@@ -24,7 +24,7 @@ public class GrpcExceptionMapper {
                     EmailAlreadyActivatedException.class, Status.Code.ALREADY_EXISTS
             );
 
-    public Status.Code getStatusCode(Throwable throwable){
+    public Status.Code getStatusCode(Throwable throwable) {
 
         return EXCEPTION_MAP.getOrDefault(
                 throwable.getClass(),

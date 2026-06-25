@@ -165,7 +165,7 @@ public class GrpcUserServiceImplTest extends AbstractGrpcIntegrationTest {
 
         ConfirmationToken confirmationToken = stub.generateEmailVerificationToken(userId);
 
-        EmailConfirmation emailConfirmation = emailConfirmationRepository.findById(UUID.fromString(confirmationToken.getToken())).orElseThrow();
+        EmailConfirmation emailConfirmation = emailConfirmationRepository.findByToken(UUID.fromString(confirmationToken.getToken())).orElseThrow();
 
         assertNotNull(emailConfirmation);
         assertEquals(emailConfirmation.getToken(), UUID.fromString(confirmationToken.getToken()));
@@ -199,7 +199,7 @@ public class GrpcUserServiceImplTest extends AbstractGrpcIntegrationTest {
 
         User checkUser = userRepository.findById(savedUser.getId()).orElseThrow();
 
-        EmailConfirmation checkToken = emailConfirmationRepository.findById(savedConfirmation.getToken()).orElseThrow();
+        EmailConfirmation checkToken = emailConfirmationRepository.findByToken(savedConfirmation.getToken()).orElseThrow();
 
         assertEquals(checkUser.getStatus(), UserStatus.ACTIVE);
         assertTrue(checkToken.getIsUsed());

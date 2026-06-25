@@ -123,7 +123,7 @@ public class EmailConfirmationServiceImplTest {
         EmailConfirmation emailConfirmation = initEmailConfirmation();
         User user = initUser();
 
-        when(emailConfirmationRepository.findById(emailConfirmation.getToken())).thenReturn(Optional.of(emailConfirmation));
+        when(emailConfirmationRepository.findByToken(emailConfirmation.getToken())).thenReturn(Optional.of(emailConfirmation));
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
 
@@ -143,7 +143,7 @@ public class EmailConfirmationServiceImplTest {
         EmailConfirmation emailConfirmation = initEmailConfirmation();
         User user = initUser();
 
-        when(emailConfirmationRepository.findById(emailConfirmation.getToken()))
+        when(emailConfirmationRepository.findByToken(emailConfirmation.getToken()))
                 .thenReturn(Optional.empty());
 
         assertThrows(EmailConfirmationNotFoundException.class, () -> {
@@ -162,7 +162,7 @@ public class EmailConfirmationServiceImplTest {
                 .withExpiresAt(LocalDateTime.of(2025, 1, 1, 1, 1))
                 .build();
 
-        when(emailConfirmationRepository.findById(any()))
+        when(emailConfirmationRepository.findByToken(any()))
                 .thenReturn(Optional.of(expiredEmailConfirmation));
 
         assertThrows(EmailConfirmationTokenExpirationException.class, () -> {
@@ -182,7 +182,7 @@ public class EmailConfirmationServiceImplTest {
                 .withUsed(true)
                 .build();
 
-        when(emailConfirmationRepository.findById(any(UUID.class)))
+        when(emailConfirmationRepository.findByToken(any(UUID.class)))
                 .thenReturn(Optional.of(confirmedEmailConfirmation));
 
         String token = confirmedEmailConfirmation.getToken().toString();
@@ -202,7 +202,7 @@ public class EmailConfirmationServiceImplTest {
         User user = initUser();
         UserResponseDto userResponseDto = initUserResponseDto();
 
-        when(emailConfirmationRepository.findById(emailConfirmation.getToken()))
+        when(emailConfirmationRepository.findByToken(emailConfirmation.getToken()))
                 .thenReturn(Optional.of(emailConfirmation));
         when(userMapper.toResponseDto(user))
                 .thenReturn(userResponseDto);
@@ -219,7 +219,7 @@ public class EmailConfirmationServiceImplTest {
         EmailConfirmation emailConfirmation = initEmailConfirmation();
         User user = initUser();
 
-        when(emailConfirmationRepository.findById(emailConfirmation.getToken()))
+        when(emailConfirmationRepository.findByToken(emailConfirmation.getToken()))
                 .thenReturn(Optional.empty());
 
         assertThrows(EmailConfirmationNotFoundException.class, () -> {

@@ -90,8 +90,8 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
 
         emailConfirmationService.confirmEmail(String.valueOf(savedConfirmationToken.getToken()));
 
-        EmailConfirmation resultConfirmation = emailConfirmationRepository.findById(savedConfirmationToken.getToken()).get();
-        User resultUser = userRepository.findById(savedUser.getId()).get();
+        EmailConfirmation resultConfirmation = emailConfirmationRepository.findByToken(savedConfirmationToken.getToken()).orElseThrow();
+        User resultUser = userRepository.findById(savedUser.getId()).orElseThrow();
 
         assertTrue(resultConfirmation.getIsUsed());
         assertEquals(resultUser.getStatus(), UserStatus.ACTIVE);
@@ -117,8 +117,8 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
             emailConfirmationService.confirmEmail(String.valueOf(savedConfirmationToken.getToken()));
         });
 
-        EmailConfirmation resultConfirmation = emailConfirmationRepository.findById(savedConfirmationToken.getToken()).get();
-        User resultUser = userRepository.findById(savedUser.getId()).get();
+        EmailConfirmation resultConfirmation = emailConfirmationRepository.findByToken(savedConfirmationToken.getToken()).orElseThrow();
+        User resultUser = userRepository.findById(savedUser.getId()).orElseThrow();
 
         assertFalse(resultConfirmation.getIsUsed());
         assertEquals(resultUser.getStatus(), UserStatus.NEED_EMAIL_CONFIRMATION);

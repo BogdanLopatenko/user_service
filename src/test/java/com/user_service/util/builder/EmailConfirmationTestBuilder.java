@@ -19,37 +19,38 @@ public class EmailConfirmationTestBuilder {
     private LocalDateTime expiresAt = LocalDateTime.ofInstant(ConstantTest.INSTANCE_AFTER, ZoneOffset.UTC);
     private Boolean isUsed = false;
 
-    public EmailConfirmationTestBuilder withToken(UUID token){
+    public EmailConfirmationTestBuilder withToken(UUID token) {
 
         this.token = token;
         return this;
     }
 
-    public EmailConfirmationTestBuilder withUser(User user){
+    public EmailConfirmationTestBuilder withUser(User user) {
 
         this.user = user;
         return this;
     }
 
 
-    public EmailConfirmationTestBuilder withExpiresAtInstant(Instant expiresAt){
+    public EmailConfirmationTestBuilder withExpiresAtInstant(Instant expiresAt) {
 
-        this.expiresAt = LocalDateTime.ofInstant(expiresAt, ZoneOffset.UTC);;
+        this.expiresAt = LocalDateTime.ofInstant(expiresAt, ZoneOffset.UTC);
         return this;
     }
-    public EmailConfirmationTestBuilder withExpiresAt(LocalDateTime expiresAt){
+
+    public EmailConfirmationTestBuilder withExpiresAt(LocalDateTime expiresAt) {
 
         this.expiresAt = expiresAt;
         return this;
     }
 
-    public EmailConfirmationTestBuilder withUsed(Boolean isUsed){
+    public EmailConfirmationTestBuilder withUsed(Boolean isUsed) {
 
         this.isUsed = isUsed;
         return this;
     }
 
-    public EmailConfirmation build(){
+    public EmailConfirmation build() {
 
         return new EmailConfirmation(
                 token,
@@ -59,7 +60,7 @@ public class EmailConfirmationTestBuilder {
         );
     }
 
-    public EmailConfirmationResponseDto buildResponseDto(){
+    public EmailConfirmationResponseDto buildResponseDto() {
 
         return new EmailConfirmationResponseDto(
                 token,

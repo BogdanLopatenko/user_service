@@ -7,9 +7,9 @@ import com.user_service.dto.user.UserResponseDto;
 import com.user_service.entity.EmailConfirmation;
 import com.user_service.entity.User;
 import com.user_service.enums.UserStatus;
-import com.user_service.exception.EmailConfirmationTokenExpirationException;
 import com.user_service.exception.EmailAlreadyActivatedException;
 import com.user_service.exception.EmailConfirmationNotFoundException;
+import com.user_service.exception.EmailConfirmationTokenExpirationException;
 import com.user_service.exception.UserNotFoundException;
 import com.user_service.mapper.EmailConfirmationMapper;
 import com.user_service.mapper.UserMapper;
@@ -124,7 +124,7 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
         log.info("Tying to get entity by UUID token: {}", token);
 
-        EmailConfirmation emailConfirmation = emailConfirmationRepository.findById(token).orElseThrow(() ->
+        EmailConfirmation emailConfirmation = emailConfirmationRepository.findByToken(token).orElseThrow(() ->
                 new EmailConfirmationNotFoundException(ExceptionConstant.EMAIL_CONFIRMATION_NOT_FOUND_BY_TOKEN + token));
 
         log.info("Exit findByToken(UUID token) method");

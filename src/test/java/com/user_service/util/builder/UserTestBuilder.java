@@ -171,7 +171,7 @@ public class UserTestBuilder {
                 .build();
     }
 
-    public com.user_service.generated.UserRequestDto buildProtoRequestDto(){
+    public com.user_service.generated.UserRequestDto buildProtoRequestDto() {
 
         return com.user_service.generated.UserRequestDto.newBuilder()
                 .setUsername(username)
@@ -182,7 +182,7 @@ public class UserTestBuilder {
                 .build();
     }
 
-    public UserId buildUserId(){
+    public UserId buildUserId() {
 
         return UserId.newBuilder()
                 .setId(id)

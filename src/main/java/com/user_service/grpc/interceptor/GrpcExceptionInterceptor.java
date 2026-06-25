@@ -34,7 +34,8 @@ public class GrpcExceptionInterceptor implements ServerInterceptor {
             delegate = next.startCall(call, headers);
         } catch (Exception e) {
             handleException(call, e);
-            return new ServerCall.Listener<>() {};
+            return new ServerCall.Listener<>() {
+            };
         }
 
         return new ForwardingServerCallListener.SimpleForwardingServerCallListener<>(delegate) {
