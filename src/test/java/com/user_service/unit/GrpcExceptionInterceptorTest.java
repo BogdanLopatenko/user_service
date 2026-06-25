@@ -1,4 +1,4 @@
-package com.user_service.service.unit;
+package com.user_service.unit;
 
 import com.user_service.grpc.GrpcExceptionMapper;
 import com.user_service.grpc.interceptor.GrpcExceptionInterceptor;
@@ -44,7 +44,7 @@ public class GrpcExceptionInterceptorTest {
     }
 
     @Test
-    void interceptCall_success_returnsListener() {
+    void shouldReturnListenerWhenCallStartsSuccessfully() {
 
         when(serverCallHandler.startCall(serverCall, metadata))
                 .thenReturn(listener);
@@ -65,7 +65,7 @@ public class GrpcExceptionInterceptorTest {
     }
 
     @Test
-    void interceptCall_exceptionInStartCall_closesCall() {
+    void shouldCloseCallWithInternalStatusWhenExceptionOccursInStartCall() {
 
         RuntimeException exception =
                 new RuntimeException("Unexpected error");
@@ -93,7 +93,7 @@ public class GrpcExceptionInterceptorTest {
     }
 
     @Test
-    void interceptCall_exceptionInOnHalfClose_closesCall() {
+    void shouldCloseCallWithMappedStatusWhenExceptionOccursInOnHalfClose() {
 
         RuntimeException exception =
                 new RuntimeException("Half close error");
@@ -127,7 +127,7 @@ public class GrpcExceptionInterceptorTest {
     }
 
     @Test
-    void interceptCall_statusRuntimeException_closesWithOriginalStatus() {
+    void shouldCloseCallWithOriginalStatusWhenStatusRuntimeExceptionIsThrown() {
 
         StatusRuntimeException exception =
                 Status.NOT_FOUND

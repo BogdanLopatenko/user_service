@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +34,6 @@ public class EmailConfirmation {
 
     @Column(name = "expires_at", nullable = false)
     @NotNull(message = "Expiration date can't be null.")
-    @FutureOrPresent(message = "Expiration date can't be in past.")
     private LocalDateTime expiresAt;
 
     @Column(name = "is_used", nullable = false)

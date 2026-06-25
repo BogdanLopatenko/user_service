@@ -52,7 +52,9 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
         log.info("User by ID was successfully got");
 
-        EmailConfirmation constructedEmailConfirmation = emailConfirmationMapper.construct(userById, LocalDateTime.now(clock).plusHours(emailConfigurationProperties.expirationDurability()), false);
+        EmailConfirmation constructedEmailConfirmation =
+                emailConfirmationMapper.construct(userById,
+                        LocalDateTime.now(clock).plusHours(emailConfigurationProperties.expirationDurability()), false);
 
         log.info("Trying to save email confirmation entity");
 
@@ -74,9 +76,12 @@ public class EmailConfirmationServiceImpl implements EmailConfirmationService {
 
         if (LocalDateTime.now(clock).isAfter(confirmationByToken.getExpiresAt())) {
 
-            log.warn("Email confirmation toke has been expired at: {} hours, {} minutes", confirmationByToken.getExpiresAt().getHour(), confirmationByToken.getExpiresAt().getMinute());
+            log.warn("Email confirmation toke has been expired at: {} hours, {} minutes",
+                    confirmationByToken.getExpiresAt().getHour(), confirmationByToken.getExpiresAt().getMinute());
 
-            throw new EmailConfirmationTokenExpirationException(ExceptionConstant.EMAIL_CONFIRMATION_TOKEN_HAD_BEEN_EXPIRED + confirmationByToken.getUser().getEmail());
+            throw new EmailConfirmationTokenExpirationException(
+                    ExceptionConstant.EMAIL_CONFIRMATION_TOKEN_HAD_BEEN_EXPIRED +
+                            confirmationByToken.getUser().getEmail());
         }
 
         if (confirmationByToken.getIsUsed()) {

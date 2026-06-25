@@ -1,6 +1,7 @@
-package com.user_service.service.unit;
+package com.user_service.unit;
 
 import com.user_service.config.properties.EmailConfigurationProperties;
+import com.user_service.constant.ConstantTest;
 import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.dto.user.UserResponseDto;
 import com.user_service.entity.EmailConfirmation;
@@ -24,10 +25,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Clock;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.user_service.util.TestEntityFactory.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,7 +38,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class EmailConfirmationServiceTest {
+public class EmailConfirmationServiceImplTest {
 
     @Mock
     private EmailConfigurationProperties emailConfigurationProperties;
@@ -54,10 +55,7 @@ public class EmailConfirmationServiceTest {
     @Mock
     private EmailConfirmationRepository emailConfirmationRepository;
 
-    private Clock clock = Clock.fixed(
-            Instant.parse("2026-05-28T12:00:00Z"),
-            ZoneOffset.UTC
-    );
+    private Clock clock = Clock.fixed(ConstantTest.DEFAULT_INSTANT, ZoneId.systemDefault());
 
     @InjectMocks
     private EmailConfirmationServiceImpl emailConfirmationService;
@@ -77,7 +75,7 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    void create_Success_ReturnDto() {
+    void shouldReturnEmailConfirmationDtoWhenUserExists() {
 
         User user = initUser();
         EmailConfirmationResponseDto emailConfirmationResponseDto = initEmailConfirmationResponseDto();
@@ -100,7 +98,7 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    void create_UserNotFound_ThrowsException() {
+    void shouldThrowUserNotFoundExceptionWhenUserDoesNotExist() {
 
         User user = initUser();
         EmailConfirmation emailConfirmation = initEmailConfirmation();
@@ -120,7 +118,7 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    void confirmEmail_Success_ChangeUserStatusToActive() {
+    void shouldChangeUserStatusToActiveWhenEmailConfirmationIsSuccessful() {
 
         EmailConfirmation emailConfirmation = initEmailConfirmation();
         User user = initUser();
@@ -140,7 +138,7 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    void confirmEmail_EmailConfirmationNotFoundException_ThrowsException() {
+    void shouldThrowEmailConfirmationNotFoundExceptionWhenEmailConfirmationDoesNotExist() {
 
         EmailConfirmation emailConfirmation = initEmailConfirmation();
         User user = initUser();
@@ -158,10 +156,10 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    void confirmEmail_EmailConfirmationTokenExpiration_ThrowsException() {
+    void shouldThrowEmailConfirmationTokenExpirationExceptionWhenTokenIsExpired() {
 
         EmailConfirmation expiredEmailConfirmation = new EmailConfirmationTestBuilder()
-                .withExpiresAt(LocalDateTime.of(2026, 5, 28, 10, 0))
+                .withExpiresAt(LocalDateTime.of(2025, 1, 1, 1, 1))
                 .build();
 
         when(emailConfirmationRepository.findById(any()))
@@ -177,28 +175,28 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    void confirmEmail_EmailAlreadyActivated_ThrowsException() {
-
-        User user = initUser();
+    void shouldThrowEmailAlreadyActivatedExceptionWhenEmailIsAlreadyActivated() {
 
         EmailConfirmation confirmedEmailConfirmation = new EmailConfirmationTestBuilder()
+                .withExpiresAt(LocalDateTime.of(2025, 2, 1, 1, 1))
                 .withUsed(true)
                 .build();
 
-        when(emailConfirmationRepository.findById(confirmedEmailConfirmation.getToken()))
+        when(emailConfirmationRepository.findById(any(UUID.class)))
                 .thenReturn(Optional.of(confirmedEmailConfirmation));
 
+        String token = confirmedEmailConfirmation.getToken().toString();
+
         assertThrows(EmailAlreadyActivatedException.class, () -> {
+            emailConfirmationService.confirmEmail(token);
+        });
 
-            emailConfirmationService.confirmEmail(String.valueOf(confirmedEmailConfirmation.getToken()));
-        }, "Should throw EmailAlreadyActivatedException when isUsed flag == true");
-
-        verify(emailConfirmationRepository, never()).save(confirmedEmailConfirmation);
-        verify(userRepository, never()).findById(user.getId());
+        verify(emailConfirmationRepository, never()).save(any());
+        verify(userRepository, never()).findById(any());
     }
 
     @Test
-    void getUserByConfirmationToken_Success_ReturnDto() {
+    void shouldReturnUserResponseDtoWhenConfirmationTokenExists() {
 
         EmailConfirmation emailConfirmation = initEmailConfirmation();
         User user = initUser();
@@ -216,7 +214,7 @@ public class EmailConfirmationServiceTest {
     }
 
     @Test
-    void getUserByConfirmationToken_EmailConfirmationNotFound_ThrowsException() {
+    void shouldThrowEmailConfirmationNotFoundExceptionWhenConfirmationTokenDoesNotExist() {
 
         EmailConfirmation emailConfirmation = initEmailConfirmation();
         User user = initUser();

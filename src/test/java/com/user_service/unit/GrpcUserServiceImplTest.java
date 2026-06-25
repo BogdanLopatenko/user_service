@@ -1,4 +1,4 @@
-package com.user_service.service.unit;
+package com.user_service.unit;
 
 import com.google.protobuf.Empty;
 import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class GrpcUserServiceTest {
+public class GrpcUserServiceImplTest {
 
     @Mock
     private UserService userService;
@@ -60,7 +60,7 @@ public class GrpcUserServiceTest {
 
 
     @Test
-    void getByUsername_success_sendsAuthDto() {
+    void shouldSendAuthDtoWhenUserExistsByUsername() {
 
         UserAuthDto userAuthDto = initUserAuthDto();
 
@@ -85,7 +85,7 @@ public class GrpcUserServiceTest {
     }
 
     @Test
-    void getByUsername_userNotFound_throwsException() {
+    void shouldThrowUserNotFoundExceptionWhenUserDoesNotExistByUsername() {
 
         Username username = Username.newBuilder()
                 .setUsername("test")
@@ -104,7 +104,7 @@ public class GrpcUserServiceTest {
     }
 
     @Test
-    void getByUsernameByConfirmationToken_success_sendsUserResponseDto() {
+    void shouldSendUserResponseDtoWhenUserExistsByConfirmationToken() {
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder()
                 .setToken("token")
@@ -134,7 +134,7 @@ public class GrpcUserServiceTest {
     }
 
     @Test
-    void getByUsernameByConfirmationToken_emailConfirmationNotFound_throwsException() {
+    void shouldThrowEmailConfirmationNotFoundExceptionWhenConfirmationTokenDoesNotExist() {
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder()
                 .setToken("invalid")
@@ -156,7 +156,7 @@ public class GrpcUserServiceTest {
     }
 
     @Test
-    void create_success_sendsResponseDto() {
+    void shouldSendResponseDtoWhenUserIsCreatedSuccessfully() {
 
         com.user_service.generated.UserRequestDto protoRequestDto =
                 initUserProtoRequestDto();
@@ -187,7 +187,7 @@ public class GrpcUserServiceTest {
     }
 
     @Test
-    void create_emailAlreadyExist_throwsException() {
+    void shouldThrowEmailAlreadyExistExceptionWhenEmailAlreadyExistsDuringCreate() {
 
         com.user_service.generated.UserRequestDto protoRequestDto =
                 initUserProtoRequestDto();
@@ -211,7 +211,7 @@ public class GrpcUserServiceTest {
     }
 
     @Test
-    void create_usernameAlreadyExist_throwsException() {
+    void shouldThrowUsernameAlreadyExistExceptionWhenUsernameAlreadyExistsDuringCreate() {
 
         com.user_service.generated.UserRequestDto protoRequestDto =
                 initUserProtoRequestDto();
@@ -235,7 +235,7 @@ public class GrpcUserServiceTest {
     }
 
     @Test
-    void generateEmailVerificationToken_success_sendsConfirmationToken() {
+    void shouldSendConfirmationTokenWhenEmailVerificationTokenIsGenerated() {
 
         UserId userId = initUserId();
 
@@ -251,7 +251,7 @@ public class GrpcUserServiceTest {
         );
 
         ConfirmationToken expected = ConfirmationToken.newBuilder()
-                .setToken(String.valueOf(emailConfirmation))
+                .setToken(String.valueOf(emailConfirmation.getToken()))
                 .build();
 
         verify(emailConfirmationService).create(userId.getId());
@@ -261,7 +261,7 @@ public class GrpcUserServiceTest {
     }
 
     @Test
-    void generateEmailVerificationToken_userNotFound_throwsException() {
+    void shouldThrowUserNotFoundExceptionWhenGeneratingEmailVerificationTokenForNonExistingUser() {
 
         UserId userId = initUserId();
 
@@ -280,7 +280,7 @@ public class GrpcUserServiceTest {
     }
 
     @Test
-    void verifyUserEmail_success_confirmsEmail() {
+    void shouldConfirmUserEmailAndSendEmptyResponseWhenTokenIsValid() {
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder()
                 .setToken("token")
@@ -305,7 +305,7 @@ public class GrpcUserServiceTest {
     }
 
     @Test
-    void verifyUserEmail_emailConfirmationTokenExpiration_throwsException() {
+    void shouldThrowEmailConfirmationTokenExpirationExceptionWhenEmailConfirmationTokenIsExpired() {
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder()
                 .setToken("expired")
@@ -330,7 +330,7 @@ public class GrpcUserServiceTest {
     }
 
     @Test
-    void verifyUserEmail_emailAlreadyActivated_throwsException() {
+    void shouldThrowEmailAlreadyActivatedExceptionWhenEmailIsAlreadyActivated() {
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder()
                 .setToken("activated")

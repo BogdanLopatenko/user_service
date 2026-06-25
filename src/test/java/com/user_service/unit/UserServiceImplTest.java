@@ -1,4 +1,4 @@
-package com.user_service.service.unit;
+package com.user_service.unit;
 
 import com.user_service.dto.user.UserRequestDto;
 import com.user_service.dto.user.UserResponseDto;
@@ -37,7 +37,7 @@ public class UserServiceImplTest {
     private UserServiceImpl userService;
 
     @Test
-    void getById_UserExists_ReturnDto() {
+    void shouldReturnUserDtoWhenUserExistsById() {
 
         User user = initUser();
         UserResponseDto userResponseDto = initUserResponseDto();
@@ -56,7 +56,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void getById_UserNotFound_ThrowsException() {
+    void shouldThrowUserNotFoundExceptionWhenUserDoesNotExistById() {
 
         Long notExistingId = 20900909L;
 
@@ -71,7 +71,7 @@ public class UserServiceImplTest {
 
 
     @Test
-    void createWithRole_Success_ReturnDto() {
+    void shouldReturnUserDtoWhenUserIsCreatedWithRole() {
 
         User user = initUser();
         UserRequestDto userRequestDto = initUserRequestDto();
@@ -101,7 +101,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void createWithRole_UsernameAlreadyExist_ThrowsException() {
+    void shouldThrowUsernameAlreadyExistExceptionWhenUsernameAlreadyExistsDuringCreateWithRole() {
 
         User user = initUser();
         UserRequestDto userRequestDto = initUserRequestDto();
@@ -117,7 +117,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void createWithRole_EmailAlreadyExist_ThrowsException() {
+    void shouldThrowEmailAlreadyExistExceptionWhenEmailAlreadyExistsDuringCreateWithRole() {
 
         User user = initUser();
         UserRequestDto userRequestDto = initUserRequestDto();
@@ -133,7 +133,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void update_Success_ReturnNothing() {
+    void shouldUpdateUserSuccessfullyWhenValidUpdateRequest() {
 
         User user = initUser();
         UserUpdateDto userUpdateDto = initUserUpdateDto();
@@ -148,7 +148,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void update_UserNotFound_ThrowsException() {
+    void shouldThrowUserNotFoundExceptionWhenUpdatingNonExistingUser() {
 
         UserUpdateDto userUpdateDto = initUserUpdateDto();
         User user = initUser();

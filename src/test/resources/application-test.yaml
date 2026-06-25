@@ -1,0 +1,11 @@
+spring:
+  liquibase:
+    enabled: true
+
+grpc:
+  server:
+    port: -1
+
+  client:
+    inProcess:
+      negotiation-type: plaintext
