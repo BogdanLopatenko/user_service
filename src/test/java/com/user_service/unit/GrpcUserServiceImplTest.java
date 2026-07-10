@@ -5,12 +5,7 @@ import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.dto.user.UserAuthDto;
 import com.user_service.dto.user.UserRequestDto;
 import com.user_service.enums.UserRole;
-import com.user_service.exception.EmailAlreadyActivatedException;
-import com.user_service.exception.EmailAlreadyExistException;
-import com.user_service.exception.EmailConfirmationNotFoundException;
-import com.user_service.exception.EmailConfirmationTokenExpirationException;
-import com.user_service.exception.UserNotFoundException;
-import com.user_service.exception.UsernameAlreadyExistException;
+import com.user_service.exception.*;
 import com.user_service.generated.ConfirmationToken;
 import com.user_service.generated.UserId;
 import com.user_service.generated.UserResponseDto;
@@ -235,7 +230,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void shouldSendConfirmationTokenWhenEmailVerificationTokenIsGenerated() {
+    void shouldSendConfirmationTokenWhenEmailConfirmationTokenIsGenerated() {
 
         UserId userId = initUserId();
 
@@ -245,7 +240,7 @@ public class GrpcUserServiceImplTest {
         when(emailConfirmationService.create(userId.getId()))
                 .thenReturn(emailConfirmation);
 
-        grpcService.generateEmailVerificationToken(
+        grpcService.generateEmailConfirmationToken(
                 userId,
                 tokenResponseObserver
         );
@@ -261,7 +256,7 @@ public class GrpcUserServiceImplTest {
     }
 
     @Test
-    void shouldThrowUserNotFoundExceptionWhenGeneratingEmailVerificationTokenForNonExistingUser() {
+    void shouldThrowUserNotFoundExceptionWhenGeneratingEmailConfirmationTokenForNonExistingUser() {
 
         UserId userId = initUserId();
 
@@ -269,7 +264,7 @@ public class GrpcUserServiceImplTest {
                 .thenThrow(new UserNotFoundException("User not found by id"));
 
         assertThrows(UserNotFoundException.class, () ->
-                grpcService.generateEmailVerificationToken(
+                grpcService.generateEmailConfirmationToken(
                         userId,
                         tokenResponseObserver
                 ));
@@ -286,7 +281,7 @@ public class GrpcUserServiceImplTest {
                 .setToken("token")
                 .build();
 
-        grpcService.verifyUserEmail(
+        grpcService.confirmUserEmail(
                 confirmationToken,
                 emptyResponseObserver
         );
@@ -318,7 +313,7 @@ public class GrpcUserServiceImplTest {
 
         assertThrows(
                 EmailConfirmationTokenExpirationException.class,
-                () -> grpcService.verifyUserEmail(
+                () -> grpcService.confirmUserEmail(
                         confirmationToken,
                         emptyResponseObserver
                 )
@@ -343,7 +338,7 @@ public class GrpcUserServiceImplTest {
 
         assertThrows(
                 EmailAlreadyActivatedException.class,
-                () -> grpcService.verifyUserEmail(
+                () -> grpcService.confirmUserEmail(
                         confirmationToken,
                         emptyResponseObserver
                 )

@@ -1,7 +1,7 @@
 package com.user_service.unit;
 
 import com.user_service.config.properties.EmailConfigurationProperties;
-import com.user_service.constant.ConstantTest;
+import com.user_service.constant.TestConstant;
 import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.dto.user.UserResponseDto;
 import com.user_service.entity.EmailConfirmation;
@@ -20,7 +20,6 @@ import com.user_service.util.builder.EmailConfirmationTestBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -55,9 +54,8 @@ public class EmailConfirmationServiceImplTest {
     @Mock
     private EmailConfirmationRepository emailConfirmationRepository;
 
-    private Clock clock = Clock.fixed(ConstantTest.DEFAULT_INSTANT, ZoneId.systemDefault());
+    private Clock clock = Clock.fixed(TestConstant.DEFAULT_INSTANT, ZoneId.systemDefault());
 
-    @InjectMocks
     private EmailConfirmationServiceImpl emailConfirmationService;
 
     @BeforeEach

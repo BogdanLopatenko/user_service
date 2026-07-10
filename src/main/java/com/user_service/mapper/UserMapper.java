@@ -5,13 +5,7 @@ import com.user_service.dto.user.UserRequestDto;
 import com.user_service.dto.user.UserResponseDto;
 import com.user_service.dto.user.UserUpdateDto;
 import com.user_service.entity.User;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 import java.util.List;
 

@@ -222,11 +222,11 @@ public class UserServiceImplTest extends AbstractIntegrationTest {
                 .withRole(UserRole.ADMIN)
                 .build();
 
-        User needVerificationUser = new UserTestBuilder()
+        User unconfirmedUser = new UserTestBuilder()
                 .withId(null)
                 .build();
 
-        userRepository.saveAll(List.of(activeUser, needVerificationUser));
+        userRepository.saveAll(List.of(activeUser, unconfirmedUser));
 
         UserFilterDto filterDto = new UserFilterDto();
         filterDto.setStatus(UserStatus.ACTIVE);

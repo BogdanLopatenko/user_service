@@ -1,6 +1,6 @@
 package com.user_service.util.builder;
 
-import com.user_service.constant.ConstantTest;
+import com.user_service.constant.TestConstant;
 import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.entity.EmailConfirmation;
 import com.user_service.entity.User;
@@ -16,7 +16,7 @@ public class EmailConfirmationTestBuilder {
 
     private User user = new UserTestBuilder().build();
 
-    private LocalDateTime expiresAt = LocalDateTime.ofInstant(ConstantTest.INSTANCE_AFTER, ZoneOffset.UTC);
+    private LocalDateTime expiresAt = LocalDateTime.ofInstant(TestConstant.INSTANCE_AFTER, ZoneOffset.UTC);
     private Boolean isUsed = false;
 
     public EmailConfirmationTestBuilder withToken(UUID token) {

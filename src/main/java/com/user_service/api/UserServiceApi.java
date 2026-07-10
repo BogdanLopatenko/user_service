@@ -32,7 +32,7 @@ public interface UserServiceApi {
     })
     UserResponseDto createWithRole(UserRequestDto dto, UserRole userRole);
 
-    @Operation(summary = "Generate email verification token", description = "Generates a new user email verification token..")
+    @Operation(summary = "Generate email confirmation token", description = "Generates a new user email confirmation token..")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Code created successfully."),
             @ApiResponse(responseCode = "400", description = "Invalid request data."),
