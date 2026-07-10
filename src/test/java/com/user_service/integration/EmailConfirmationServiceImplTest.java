@@ -2,7 +2,7 @@ package com.user_service.integration;
 
 import com.user_service.AbstractIntegrationTest;
 import com.user_service.config.ClockTestConfig;
-import com.user_service.constant.ConstantTest;
+import com.user_service.constant.TestConstant;
 import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.dto.user.UserResponseDto;
 import com.user_service.entity.EmailConfirmation;
@@ -45,14 +45,14 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
     @AfterEach
     void setDefaultClockDate() {
 
-        clock.setInstant(ConstantTest.DEFAULT_INSTANT);
+        clock.setInstant(TestConstant.DEFAULT_INSTANT);
     }
 
     @Test
     void shouldUseTestClock() {
 
         assertEquals(
-                ConstantTest.DEFAULT_INSTANT,
+                TestConstant.DEFAULT_INSTANT,
                 clock.instant()
         );
     }
@@ -105,13 +105,13 @@ public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
 
         EmailConfirmation emailConfirmation = new EmailConfirmationTestBuilder()
                 .withToken(null)
-                .withExpiresAtInstant(ConstantTest.DEFAULT_INSTANT)
+                .withExpiresAtInstant(TestConstant.DEFAULT_INSTANT)
                 .withUser(savedUser)
                 .build();
 
         EmailConfirmation savedConfirmationToken = emailConfirmationRepository.save(emailConfirmation);
 
-        clock.setInstant(ConstantTest.INSTANCE_AFTER);
+        clock.setInstant(TestConstant.INSTANCE_AFTER);
 
         assertThrows(EmailConfirmationTokenExpirationException.class, () -> {
             emailConfirmationService.confirmEmail(String.valueOf(savedConfirmationToken.getToken()));

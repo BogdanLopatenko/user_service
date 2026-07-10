@@ -1,11 +1,6 @@
 package com.user_service.grpc;
 
-import com.user_service.exception.EmailAlreadyActivatedException;
-import com.user_service.exception.EmailAlreadyExistException;
-import com.user_service.exception.EmailConfirmationNotFoundException;
-import com.user_service.exception.EmailConfirmationTokenExpirationException;
-import com.user_service.exception.UserNotFoundException;
-import com.user_service.exception.UsernameAlreadyExistException;
+import com.user_service.exception.*;
 import io.grpc.Status;
 import org.springframework.stereotype.Component;
 

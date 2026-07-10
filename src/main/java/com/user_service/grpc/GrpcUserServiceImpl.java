@@ -3,12 +3,7 @@ package com.user_service.grpc;
 import com.google.protobuf.Empty;
 import com.user_service.dto.confirmation.EmailConfirmationResponseDto;
 import com.user_service.enums.UserRole;
-import com.user_service.generated.ConfirmationToken;
-import com.user_service.generated.UserAuthDto;
-import com.user_service.generated.UserId;
-import com.user_service.generated.UserRequestDto;
-import com.user_service.generated.UserResponseDto;
-import com.user_service.generated.Username;
+import com.user_service.generated.*;
 import com.user_service.mapper.UserProtoMapper;
 import com.user_service.service.EmailConfirmationService;
 import com.user_service.service.UserService;
@@ -40,11 +35,13 @@ public class GrpcUserServiceImpl extends com.user_service.generated.UserServiceG
     }
 
     @Override
-    public void getUserByConfirmationToken(ConfirmationToken request, StreamObserver<UserResponseDto> responseObserver) {
+    public void getUserByConfirmationToken(ConfirmationToken request,
+                                           StreamObserver<UserResponseDto> responseObserver) {
 
         String confirmationToken = request.getToken();
 
-        com.user_service.dto.user.UserResponseDto userByConfirmationToken = emailConfirmationService.getUserByConfirmationToken(confirmationToken);
+        com.user_service.dto.user.UserResponseDto userByConfirmationToken =
+                emailConfirmationService.getUserByConfirmationToken(confirmationToken);
 
         UserResponseDto responseDto = userProtoMapper.toProtoResponseDto(userByConfirmationToken);
 
@@ -66,7 +63,7 @@ public class GrpcUserServiceImpl extends com.user_service.generated.UserServiceG
     }
 
     @Override
-    public void generateEmailVerificationToken(UserId userid, StreamObserver<ConfirmationToken> responseObserver) {
+    public void generateEmailConfirmationToken(UserId userid, StreamObserver<ConfirmationToken> responseObserver) {
 
         EmailConfirmationResponseDto emailConfirmationResponseDto =
                 emailConfirmationService.create(userid.getId());
@@ -80,7 +77,7 @@ public class GrpcUserServiceImpl extends com.user_service.generated.UserServiceG
     }
 
     @Override
-    public void verifyUserEmail(ConfirmationToken request, StreamObserver<Empty> responseObserver) {
+    public void confirmUserEmail(ConfirmationToken request, StreamObserver<Empty> responseObserver) {
 
         emailConfirmationService.confirmEmail(request.getToken());
 

@@ -2,17 +2,11 @@ package com.user_service.integration;
 
 import com.user_service.AbstractGrpcIntegrationTest;
 import com.user_service.config.ClockTestConfig;
-import com.user_service.constant.ConstantTest;
+import com.user_service.constant.TestConstant;
 import com.user_service.entity.EmailConfirmation;
 import com.user_service.entity.User;
 import com.user_service.enums.UserStatus;
-import com.user_service.generated.ConfirmationToken;
-import com.user_service.generated.UserAuthDto;
-import com.user_service.generated.UserId;
-import com.user_service.generated.UserRequestDto;
-import com.user_service.generated.UserResponseDto;
-import com.user_service.generated.UserServiceGrpc;
-import com.user_service.generated.Username;
+import com.user_service.generated.*;
 import com.user_service.repository.EmailConfirmationRepository;
 import com.user_service.repository.UserRepository;
 import com.user_service.util.MutableClock;
@@ -50,7 +44,7 @@ public class GrpcUserServiceImplTest extends AbstractGrpcIntegrationTest {
     void tearDown() {
         emailConfirmationRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
-        clock.setInstant(ConstantTest.DEFAULT_INSTANT);
+        clock.setInstant(TestConstant.DEFAULT_INSTANT);
     }
 
     @Test
@@ -156,14 +150,14 @@ public class GrpcUserServiceImplTest extends AbstractGrpcIntegrationTest {
     }
 
     @Test
-    void shouldGenerateEmailVerificationTokenForExistingUser() {
+    void shouldGenerateEmailConfirmationTokenForExistingUser() {
 
         User user = new UserTestBuilder().withId(null).build();
         User savedUser = userRepository.saveAndFlush(user);
 
         UserId userId = UserId.newBuilder().setId(savedUser.getId()).build();
 
-        ConfirmationToken confirmationToken = stub.generateEmailVerificationToken(userId);
+        ConfirmationToken confirmationToken = stub.generateEmailConfirmationToken(userId);
 
         EmailConfirmation emailConfirmation = emailConfirmationRepository.findByToken(UUID.fromString(confirmationToken.getToken())).orElseThrow();
 
@@ -172,13 +166,13 @@ public class GrpcUserServiceImplTest extends AbstractGrpcIntegrationTest {
     }
 
     @Test
-    void shouldThrowNotFoundWhenGeneratingEmailVerificationTokenForNonExistingUser() {
+    void shouldThrowNotFoundWhenGeneratingEmailConfirmationTokenForNonExistingUser() {
 
         UserId userId = UserId.newBuilder().setId(9999999L).build();
 
         StatusRuntimeException exception = assertThrows(StatusRuntimeException.class, () -> {
 
-            stub.generateEmailVerificationToken(userId);
+            stub.generateEmailConfirmationToken(userId);
         });
 
         assertEquals(Status.Code.NOT_FOUND, exception.getStatus().getCode());
@@ -195,7 +189,7 @@ public class GrpcUserServiceImplTest extends AbstractGrpcIntegrationTest {
         EmailConfirmation savedConfirmation = emailConfirmationRepository.saveAndFlush(emailConfirmation);
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder().setToken(String.valueOf(savedConfirmation.getToken())).build();
-        stub.verifyUserEmail(confirmationToken);
+        stub.confirmUserEmail(confirmationToken);
 
         User checkUser = userRepository.findById(savedUser.getId()).orElseThrow();
 
@@ -214,17 +208,17 @@ public class GrpcUserServiceImplTest extends AbstractGrpcIntegrationTest {
         EmailConfirmation emailConfirmation = new EmailConfirmationTestBuilder()
                 .withToken(null)
                 .withUser(savedUser)
-                .withExpiresAtInstant(ConstantTest.DEFAULT_INSTANT)
+                .withExpiresAtInstant(TestConstant.DEFAULT_INSTANT)
                 .build();
 
         EmailConfirmation savedConfirmation = emailConfirmationRepository.saveAndFlush(emailConfirmation);
 
-        clock.setInstant(ConstantTest.INSTANCE_AFTER);
+        clock.setInstant(TestConstant.INSTANCE_AFTER);
 
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder().setToken(String.valueOf(savedConfirmation.getToken())).build();
 
         StatusRuntimeException exception = assertThrows(StatusRuntimeException.class, () -> {
-            stub.verifyUserEmail(confirmationToken);
+            stub.confirmUserEmail(confirmationToken);
         });
 
         assertEquals(exception.getStatus().getCode(), Status.Code.UNAUTHENTICATED);
@@ -243,7 +237,7 @@ public class GrpcUserServiceImplTest extends AbstractGrpcIntegrationTest {
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder().setToken(String.valueOf(savedConfirmation.getToken())).build();
 
         StatusRuntimeException exception = assertThrows(StatusRuntimeException.class, () -> {
-            stub.verifyUserEmail(confirmationToken);
+            stub.confirmUserEmail(confirmationToken);
         });
 
         assertEquals(exception.getStatus().getCode(), Status.Code.ALREADY_EXISTS);
@@ -255,7 +249,7 @@ public class GrpcUserServiceImplTest extends AbstractGrpcIntegrationTest {
         ConfirmationToken confirmationToken = ConfirmationToken.newBuilder().setToken(String.valueOf(UUID.randomUUID())).build();
 
         StatusRuntimeException exception = assertThrows(StatusRuntimeException.class, () -> {
-            stub.verifyUserEmail(confirmationToken);
+            stub.confirmUserEmail(confirmationToken);
         });
 
         assertEquals(Status.Code.NOT_FOUND, exception.getStatus().getCode());
