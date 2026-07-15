@@ -1,6 +1,6 @@
 package com.user_service.integration;
 
-import com.user_service.AbstractGrpcIntegrationTest;
+import com.user_service.GrpcAbstractIntegrationTest;
 import com.user_service.config.ClockTestConfig;
 import com.user_service.constant.TestConstant;
 import com.user_service.entity.EmailConfirmation;
@@ -25,7 +25,7 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 
 @Import(ClockTestConfig.class)
-public class GrpcUserServiceImplTest extends AbstractGrpcIntegrationTest {
+public class GrpcAbstractUserServiceImplIT extends GrpcAbstractIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;

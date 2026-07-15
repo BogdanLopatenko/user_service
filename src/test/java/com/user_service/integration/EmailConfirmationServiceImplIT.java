@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
 
 @Transactional
 @Import(ClockTestConfig.class)
-public class EmailConfirmationServiceImplTest extends AbstractIntegrationTest {
+public class EmailConfirmationServiceImplIT extends AbstractIntegrationTest {
 
     @Autowired
     private EmailConfirmationRepository emailConfirmationRepository;

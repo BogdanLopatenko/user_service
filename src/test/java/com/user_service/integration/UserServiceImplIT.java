@@ -26,7 +26,7 @@ import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.*;
 
 @Transactional
-public class UserServiceImplTest extends AbstractIntegrationTest {
+public class UserServiceImplIT extends AbstractIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
