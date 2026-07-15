@@ -5,7 +5,7 @@ import org.springframework.test.context.DynamicPropertySource;
 
 import java.util.UUID;
 
-public abstract class AbstractGrpcIntegrationTest extends AbstractIntegrationTest {
+public abstract class GrpcAbstractIntegrationTest extends AbstractIntegrationTest {
 
     private static final String GRPC_NAME =
             "grpc-test-" + UUID.randomUUID();
