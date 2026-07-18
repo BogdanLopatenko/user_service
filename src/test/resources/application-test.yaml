@@ -4,8 +4,10 @@ spring:
 
 grpc:
   server:
+    in-process-name: grpc-test
     port: -1
 
   client:
     inProcess:
+      address: in-process:grpc-test
       negotiation-type: plaintext
