@@ -1,11 +1,6 @@
-spring:
-  liquibase:
-    enabled: true
-
 grpc:
   server:
     in-process-name: grpc-test
-    port: -1
 
   client:
     inProcess:
