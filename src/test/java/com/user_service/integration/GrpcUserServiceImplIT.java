@@ -1,6 +1,7 @@
 package com.user_service.integration;
 
 import com.user_service.AbstractIntegrationTest;
+import com.user_service.config.ClockTestConfig;
 import com.user_service.constant.TestConstant;
 import com.user_service.entity.EmailConfirmation;
 import com.user_service.entity.User;
@@ -17,11 +18,15 @@ import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.UUID;
 
 import static org.junit.Assert.*;
 
+@ActiveProfiles("grpc")
+@Import(ClockTestConfig.class)
 public class GrpcUserServiceImplIT extends AbstractIntegrationTest {
 
     @Autowired
